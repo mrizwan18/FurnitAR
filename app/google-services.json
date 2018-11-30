@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "788287719692",
+    "firebase_url": "https://furnitar-1a23d.firebaseio.com",
+    "project_id": "furnitar-1a23d",
+    "storage_bucket": "furnitar-1a23d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:788287719692:android:0313d12012338363",
+        "android_client_info": {
+          "package_name": "com.razi.furnitar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "788287719692-3p19bk8ma74e285erue576cja6mf0thg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.razi.furnitar",
+            "certificate_hash": "fc33fdf74b144bb2f8e86dc8649477ac0cbf353a"
+          }
+        },
+        {
+          "client_id": "788287719692-9onp9l4v34v2bl5dgn2nbjs2h39gcjqa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA64EnUTfs8VFFlRwlLfJA5iP1OpLVPWPY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "788287719692-9onp9l4v34v2bl5dgn2nbjs2h39gcjqa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
