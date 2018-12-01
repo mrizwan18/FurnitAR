@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -93,6 +94,15 @@ public class MainActivity extends AppCompatActivity {
         adapter = new RecyclerViewAdapter(options);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int pos) {
+                String path = documentSnapshot.getReference().getPath();
+                Intent intent = new Intent(getApplicationContext(), ItemDetail.class);
+                intent.putExtra("path", path);
+                startActivity(intent);
+            }
+        });
     }
 
     public void signOut() {

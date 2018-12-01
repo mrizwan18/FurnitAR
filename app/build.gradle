@@ -16,6 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -33,6 +37,16 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.google.ar.sceneform:assets:1.5.1'
+
+    // Provides ARCore Session and related resources.
+    implementation 'com.google.ar:core:1.5.0'
+
+    // Provides ArFragment, and other UX resources.
+    implementation 'com.google.ar.sceneform.ux:sceneform-ux:1.5.1'
+
+    // Alternatively, use ArSceneView without the UX dependency.
+    implementation 'com.google.ar.sceneform:core:1.5.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -10,6 +10,7 @@ public class Item {
     private Double price;
     private List<String> images;
     private boolean isAR;
+    private int quantity;
 
     public Item(){}
 
@@ -36,13 +37,5 @@ public class Item {
         return isAR;
     }
 
-    @Override
-    public String toString() {
-        return "Item{" +
-                "name='" + name + '\'' +
-                ", price=" + price +
-                ", images=" + images +
-                ", isAR=" + isAR +
-                '}';
-    }
+    public int getQuantity() { return quantity; }
 }
