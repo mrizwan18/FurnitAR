@@ -2,17 +2,22 @@ package com.razi.furnitar;
 
 import android.widget.ImageView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Item {
     private String name;
     private Double price;
-    private ImageView img;
-    private boolean status;
+    private List<String> images;
+    private boolean isAR;
 
-    public Item(String name, Double price, ImageView img, boolean status) {
+    public Item(){}
+
+    public Item(String name, Double price, ArrayList<String> img, boolean isAR) {
         this.name = name;
         this.price = price;
-        this.img = img;
-        this.status = status;
+        this.images = img;
+        this.isAR = isAR;
     }
 
     public String getName() {
@@ -23,11 +28,21 @@ public class Item {
         return price;
     }
 
-    public ImageView getImg() {
-        return img;
+    public List<String> getImages() {
+        return images;
     }
 
-    public boolean isStatus() {
-        return status;
+    public boolean getIsAR() {
+        return isAR;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "name='" + name + '\'' +
+                ", price=" + price +
+                ", images=" + images +
+                ", isAR=" + isAR +
+                '}';
     }
 }

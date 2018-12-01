@@ -8,14 +8,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class RecyclerViewAdapter extends FirestoreRecyclerAdapter<Item, RecyclerViewAdapter.ViewHolder> {
 
-    private ArrayList<Item> items;
-
-    public RecyclerViewAdapter(ArrayList<Item> items) {
-        this.items = items;
+    public RecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<Item> options) {
+        super(options);
     }
 
     @NonNull
@@ -27,21 +29,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.name.setText(items.get(i).getName());
-        viewHolder.price.setText(items.get(i).getPrice() + "");
-        viewHolder.img.setImageResource(R.drawable.chair);
-        if (items.get(i).isStatus()) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i, @NonNull Item model) {
+        viewHolder.name.setText(model.getName());
+        viewHolder.price.setText(model.getPrice() + "");
+        String url = model.getImages().get(0);
+        Picasso.get()
+                .load(url)
+                .into(viewHolder.img);
+        if (model.getIsAR()) {
             viewHolder.arLabel.setText("AR");
         } else {
             viewHolder.arLabel.setText("");
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return items.size();
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
