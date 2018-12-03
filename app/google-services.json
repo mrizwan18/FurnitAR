@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "788287719692-d4ls1b8sj5ur8camfeu3io09rkgq580l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.razi.furnitar",
+            "certificate_hash": "cef6e8f2945a453cd2859a0785e2acd3e44cbad4"
+          }
+        },
+        {
           "client_id": "788287719692-9onp9l4v34v2bl5dgn2nbjs2h39gcjqa.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -40,7 +48,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "788287719692-9onp9l4v34v2bl5dgn2nbjs2h39gcjqa.apps.googleusercontent.com",
+              "client_id": "788287719692-k154crltc9ueimriel8ebqp3acgpr8c9.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
