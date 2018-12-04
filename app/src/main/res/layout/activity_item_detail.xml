@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,64 +8,92 @@
     android:orientation="vertical"
     tools:context=".ItemDetail">
 
-    <ImageView
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/itemImages"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:id="@+id/itemName"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="28sp"
+                android:id="@+id/itemPrice"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:text="View in AR"
+                android:textSize="22sp"
+                android:gravity="center"
+                android:id="@+id/viewInAR"
+                android:onClick="viewInAR"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="italic|bold"
+                android:textColor="#7C0A02"
+                android:text="AR Core is not supported on this device"
+                android:visibility="invisible"
+                android:id="@+id/errorText"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/quantity">
+
+                </NumberPicker>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:text="Add To Cart"
+                    android:layout_weight="4"
+                    android:layout_gravity="center"
+                    android:id="@+id/addToCart"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <android.support.v4.widget.Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/itemImages"/>
+        android:minHeight="0dp"
+        android:layout_weight="1"/>
 
-    <TextView
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:id="@+id/itemName"/>
+        android:layout_gravity="center_horizontal"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="28sp"
-        android:id="@+id/itemPrice"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:text="View in AR"
-        android:textSize="22sp"
-        android:gravity="center"
-        android:id="@+id/viewInAR"
-        android:onClick="viewInAR"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textStyle="italic|bold"
-        android:textColor="#7C0A02"
-        android:text="AR Core is not supported on this device"
-        android:visibility="invisible"
-        android:id="@+id/errorText"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <NumberPicker
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/quantity">
-
-        </NumberPicker>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:text="Add To Cart"
-            android:layout_weight="4"
-            android:layout_gravity="center"
-            android:id="@+id/addToCart"/>
-
-    </LinearLayout>
 
 </LinearLayout>

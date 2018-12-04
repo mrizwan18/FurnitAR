@@ -23,6 +23,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     GoogleApiClient mGoogleApiClient;
     FirebaseAuth.AuthStateListener aL;
     private Context c;
+    private FirebaseAnalytics mFirebaseAnalytics;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -64,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         initRecyclerView();
         /*aL = new FirebaseAuth.AuthStateListener() {
@@ -97,7 +101,13 @@ public class MainActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int pos) {
+                Bundle bundle = new Bundle();
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                 String path = documentSnapshot.getReference().getPath();
+                String id = documentSnapshot.getId();
+                String name = documentSnapshot.get("name").toString();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
                 Intent intent = new Intent(getApplicationContext(), ItemDetail.class);
                 intent.putExtra("path", path);
                 startActivity(intent);

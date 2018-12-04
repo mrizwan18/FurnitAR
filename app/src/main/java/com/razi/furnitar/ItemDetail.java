@@ -11,9 +11,12 @@ import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.ar.core.ArCoreApk;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,6 +31,7 @@ public class ItemDetail extends AppCompatActivity {
     Button btn;
     NumberPicker numberPicker;
     Item item;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,9 @@ public class ItemDetail extends AppCompatActivity {
         btn = findViewById(R.id.viewInAR);
         numberPicker = findViewById(R.id.quantity);
         errorText = findViewById(R.id.errorText);
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         Intent intent = getIntent();
         String path = intent.getStringExtra("path");
@@ -61,6 +68,11 @@ public class ItemDetail extends AppCompatActivity {
                 numberPicker.setMaxValue(item.getQuantity());
             }
         });
+        AdView adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+        adView.loadAd(adRequest);
     }
 
     boolean maybeEnableArButton() {
@@ -83,6 +95,12 @@ public class ItemDetail extends AppCompatActivity {
     }
 
     public void viewInAR(View view) {
+        Bundle bundle = new Bundle();
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        String id = itemRef.getId();
+        String name = item.getName();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name + ": View in AR");
         String asset = item.getImages().get(1);
         Intent intent = new Intent(getApplicationContext(), ARactivity.class);
         intent.putExtra("asset", asset);
