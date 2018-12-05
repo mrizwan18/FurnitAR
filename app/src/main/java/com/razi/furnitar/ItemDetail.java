@@ -1,19 +1,22 @@
 package com.razi.furnitar;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.Database.Database;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.ar.core.ArCoreApk;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -23,12 +26,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 public class ItemDetail extends AppCompatActivity {
-
+    public static final String tag = ItemDetail.class.getSimpleName();
     FirebaseFirestore db;
     DocumentReference itemRef;
     ImageView itemImages;
     TextView itemName, itemPrice, errorText;
-    Button btn;
+    Button btn, addToCart;
     NumberPicker numberPicker;
     Item item;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -37,13 +40,14 @@ public class ItemDetail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
-
+        MobileAds.initialize(this, "ca-app-pub-3785462047203626~3446159950");
         itemImages = findViewById(R.id.itemImages);
         itemName = findViewById(R.id.itemName);
         itemPrice = findViewById(R.id.itemPrice);
         btn = findViewById(R.id.viewInAR);
         numberPicker = findViewById(R.id.quantity);
         errorText = findViewById(R.id.errorText);
+        addToCart = findViewById(R.id.addToCart);
 
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -61,7 +65,7 @@ public class ItemDetail extends AppCompatActivity {
                         .into(itemImages);
                 itemName.setText(item.getName());
                 itemPrice.setText("Rs. " + item.getPrice());
-                if(item.getIsAR() && maybeEnableArButton()){
+                if (item.getIsAR() && maybeEnableArButton()) {
                     btn.setVisibility(View.VISIBLE);
                 }
                 numberPicker.setMinValue(1);
@@ -70,7 +74,6 @@ public class ItemDetail extends AppCompatActivity {
         });
         AdView adView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
         adView.loadAd(adRequest);
     }
@@ -105,5 +108,20 @@ public class ItemDetail extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), ARactivity.class);
         intent.putExtra("asset", asset);
         startActivity(intent);
+    }
+
+    public void addToCart(View view) {
+        itemRef.update("quantity", item.getPrice() - numberPicker.getValue()).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                try {
+                    new Database((getBaseContext()))
+                            .addToCart(new order(itemRef.getId(), item.getName(), item.getPrice(), numberPicker.getValue()));
+                }catch (Exception e){
+                    itemRef.update("quantity", item.getPrice() + numberPicker.getValue());
+                }
+            }
+        });
+
     }
 }

@@ -21,11 +21,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".Login">
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity android:name=".signUp" />
         <activity android:name=".ItemDetail" />
@@ -33,8 +33,19 @@
         <meta-data
             android:name="com.google.ar.core"
             android:value="optional" />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3785462047203626~3446159950"/>
 
-        <activity android:name=".ARactivity"></activity>
+        <activity android:name=".ARactivity" />
+        <activity android:name=".cart_activity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

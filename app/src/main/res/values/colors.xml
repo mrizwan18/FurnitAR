@@ -3,4 +3,5 @@
     <color name="colorPrimary">#1e272e</color>
     <color name="colorPrimaryDark">#ffa801</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="cart">#FFF</color>
 </resources>
