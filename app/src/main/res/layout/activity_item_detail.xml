@@ -72,6 +72,7 @@
                     android:text="Add To Cart"
                     android:layout_weight="4"
                     android:layout_gravity="center"
+                    android:onClick="addToCart"
                     android:id="@+id/addToCart"/>
 
             </LinearLayout>
@@ -93,7 +94,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"/>
+        ads:adUnitId="ca-app-pub-3785462047203626/6866530217"/>
 
 
 </LinearLayout>

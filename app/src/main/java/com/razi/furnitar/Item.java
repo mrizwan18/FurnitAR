@@ -1,7 +1,5 @@
 package com.razi.furnitar;
 
-import android.widget.ImageView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +10,8 @@ public class Item {
     private boolean isAR;
     private int quantity;
 
-    public Item(){}
+    public Item() {
+    }
 
     public Item(String name, Double price, ArrayList<String> img, boolean isAR) {
         this.name = name;
@@ -20,6 +19,7 @@ public class Item {
         this.images = img;
         this.isAR = isAR;
     }
+
 
     public String getName() {
         return name;
@@ -37,5 +37,7 @@ public class Item {
         return isAR;
     }
 
-    public int getQuantity() { return quantity; }
+    public int getQuantity() {
+        return quantity;
+    }
 }
