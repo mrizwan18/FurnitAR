@@ -46,6 +46,14 @@ dependencies {
     implementation 'info.hoang8f:fbutton:1.0.5'
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
+    compile('com.mikepenz:materialdrawer:5.9.5@aar') {
+        transitive = true
+        exclude group: 'com.android.support'
+    }
+    dependencies {
+        implementation 'com.jakewharton:butterknife:9.0.0-rc2'
+        annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc2'
+    }
 
     // Provides ARCore Session and related resources.
     implementation 'com.google.ar:core:1.5.0'

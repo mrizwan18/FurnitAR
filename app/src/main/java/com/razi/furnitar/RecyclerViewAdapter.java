@@ -19,7 +19,6 @@ import java.util.ArrayList;
 public class RecyclerViewAdapter extends FirestoreRecyclerAdapter<Item, RecyclerViewAdapter.ViewHolder> {
 
     private OnItemClickListener listener;
-
     public RecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<Item> options) {
         super(options);
     }
