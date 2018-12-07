@@ -1,6 +1,7 @@
 package com.razi.furnitar;
 
 public class order {
+    private String userid;
     private String id;
     private String name;
     private double price;
@@ -9,19 +10,12 @@ public class order {
     public order() {
     }
 
-    public order(String id, String name, double price, int quantity) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
+    public String getUserid() {
+        return userid;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setUserid(String userid) {
+        this.userid = userid;
     }
 
     public String getId() {
@@ -30,6 +24,14 @@ public class order {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public double getPrice() {
@@ -45,6 +47,15 @@ public class order {
     }
 
     public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public order(String userid, String id, String name, double price, int quantity) {
+
+        this.userid = userid;
+        this.id = id;
+        this.name = name;
+        this.price = price;
         this.quantity = quantity;
     }
 }

@@ -26,8 +26,6 @@ public class cart_activity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference request;
     List<order> cart = new ArrayList<>();
     TextView total;
     Button checkout;

@@ -129,21 +129,16 @@ public class ItemDetail extends AppCompatActivity {
             public void onSuccess(Void aVoid) {
                 try {
                     new Database((getBaseContext()))
-                            .addToCart(new order(itemRef.getId(), item.getName(), item.getPrice(), numberPicker.getValue()));
+                            .addToCart(new order(common.currentUser.getId(),
+                                    itemRef.getId(),
+                                    item.getName(),
+                                    item.getPrice(),
+                                    numberPicker.getValue()));
                 } catch (Exception e) {
                     itemRef.update("quantity", item.getPrice() + numberPicker.getValue());
                 }
             }
         });
 
-    }
-
-    public void clearCart(View view) {
-        new Database((getBaseContext()))
-                .clearCart();
-    }
-
-    public void showCart(View view) {
-        startActivity(new Intent(ItemDetail.this, cart_activity.class));
     }
 }
