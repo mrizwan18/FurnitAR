@@ -1,6 +1,7 @@
 package com.razi.furnitar;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -31,7 +32,7 @@ import java.util.regex.Pattern;
 public class Login extends AppCompatActivity {
     SignInButton sBtn;
     FirebaseAuth gAuth;
-    EditText user, pass;
+    EditText userT, pass;
     Button signin, signUp;
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAuth.AuthStateListener aL;
@@ -42,7 +43,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         gAuth = FirebaseAuth.getInstance();
-        user = findViewById(R.id.username);
+        userT = findViewById(R.id.username);
         pass = findViewById(R.id.password);
         signin = findViewById(R.id.signin);
         signUp = findViewById(R.id.signup_2);
@@ -66,7 +67,7 @@ public class Login extends AppCompatActivity {
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signIn(user.getText().toString(), pass.getText().toString());
+                signIn(userT.getText().toString(), pass.getText().toString());
             }
         });
         signUp.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +80,12 @@ public class Login extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null) {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    String name = user.getDisplayName();
+                    String email = user.getEmail();
+                    Uri photoUrl = user.getPhotoUrl();
+                    String uid = user.getUid();
+                    common.currentUser = new user(name, uid, email, photoUrl);
                     startActivity(new Intent(Login.this, MainActivity.class));
                 }
             }
@@ -102,13 +109,13 @@ public class Login extends AppCompatActivity {
                         + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
                         + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
 
-        CharSequence inputStr = user.getText().toString();
+        CharSequence inputStr = userT.getText().toString();
 
         Pattern pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(inputStr);
 
         if (!matcher.matches()) {
-            user.setError("Invalid Email");
+            userT.setError("Invalid Email");
             return;
         }
 
@@ -126,6 +133,12 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("OK", "signInWithEmail:success");
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            String name = user.getDisplayName();
+                            String email = user.getEmail();
+                            Uri photoUrl = user.getPhotoUrl();
+                            String uid = user.getUid();
+                            common.currentUser = new user(name, uid, email, photoUrl);
                             startActivity(new Intent(Login.this, MainActivity.class));
                             // FirebaseUser user = gAuth.getCurrentUser();
                             //updateUI(user);
@@ -187,7 +200,13 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("One", "signInWithCredential:success");
-                            FirebaseUser user = gAuth.getCurrentUser();
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            String name = user.getDisplayName();
+                            String email = user.getEmail();
+                            Uri photoUrl = user.getPhotoUrl();
+                            String uid = user.getUid();
+                            common.currentUser = new user(name, uid, email, photoUrl);
+                            Log.i("Yes", common.currentUser.getName());
                             //updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.

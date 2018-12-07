@@ -1,11 +1,13 @@
 package com.Database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Pair;
 
+import com.razi.furnitar.common;
 import com.razi.furnitar.order;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -13,52 +15,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Database extends SQLiteAssetHelper {
-    private static final String DB_NAME = "furnitar.db";
-    private static final int DB_VERSION = 1;
+    public static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = "cartDB.db";
 
     public Database(Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     public List<order> getCarts() {
-        SQLiteDatabase db = getReadableDatabase();
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        String[] sqlselect = {"id", "price", "quantity", "name"};
-        String sqlTable = "order";
-        qb.setTables(sqlTable);
-        Cursor c = qb.query(db, sqlselect, null, null, null, null, null);
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT* FROM cart where userID='" + common.currentUser.getId() + "'";
+        Cursor cursor = db.rawQuery(selectQuery, null);
         final List<order> result = new ArrayList<>();
-        if (c.moveToNext()) {
+        if (cursor.moveToNext()) {
             do {
-                result.add(new order(c.getString(c.getColumnIndex("id")),
-                        c.getString(c.getColumnIndex("name")),
-                        c.getDouble(c.getColumnIndex("price")),
-                        c.getInt(c.getColumnIndex("quantity"))));
+                result.add(new order(cursor.getString(cursor.getColumnIndex("userID")),
+                        cursor.getString(cursor.getColumnIndex("id")),
+                        cursor.getString(cursor.getColumnIndex("name")),
+                        cursor.getDouble(cursor.getColumnIndex("price")),
+                        cursor.getInt(cursor.getColumnIndex("quantity"))));
             }
-            while (c.moveToNext());
+            while (cursor.moveToNext());
         }
         return result;
     }
 
     public void addToCart(order order) {
-        SQLiteDatabase db = getReadableDatabase();
-        String query = String.format("Insert into order(id, price, quantity, name) VALUES('%s','%s', '%s', '%s')",
-                order.getId(),
-                order.getPrice(),
-                order.getQuantity(),
-                order.getName());
-        db.execSQL(query);
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("id", order.getId());
+        values.put("name", order.getName());
+        values.put("price", order.getPrice());
+        values.put("quantity", order.getQuantity());
+        values.put("userID", order.getUserid());
+        db.insertWithOnConflict("cart", null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
-    public Pair<String,Integer> removeFromCart(order order) {
-        SQLiteDatabase db = getReadableDatabase();
+    public Pair<String, Integer> removeFromCart(order order) {
+        SQLiteDatabase db = this.getReadableDatabase();
         String query;
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         String[] sqlselect = {"id", "quantity"};
-        String sqlTable = "order";
+        String sqlTable = "cart";
         qb.setTables(sqlTable);
         String[] s = {order.getId()};
-        Cursor c = qb.query(db, sqlselect, "id", s , null, null, null);
+        Cursor c = qb.query(db, sqlselect, "id", s, null, null, null);
         ArrayList<Pair<String, Integer>> result = new ArrayList<Pair<String, Integer>>();
         if (c.moveToNext()) {
             do {
@@ -67,14 +68,14 @@ public class Database extends SQLiteAssetHelper {
             }
             while (c.moveToNext());
         }
-        query = String.format("DELETE FROM order where id='%s';", order.getId());
+        query = String.format("DELETE FROM cart where id='%s';", order.getId());
         db.execSQL(query);
         return result.get(0);
     }
 
     public void clearCart() {
-        SQLiteDatabase db = getReadableDatabase();
-        String query = String.format("DELETE FROM order");
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = String.format("DELETE FROM cart");
         db.execSQL(query);
     }
 }

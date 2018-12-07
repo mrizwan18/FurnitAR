@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#ffa801</color>
     <color name="colorAccent">#FF4081</color>
     <color name="cart">#FFF</color>
+    <color name="overlaybackground">#7f333639</color>
+    <color name="overlayactionbar">#0e0d0e</color>
+
 </resources>

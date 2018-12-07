@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -25,6 +26,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ItemDetail extends AppCompatActivity {
     public static final String tag = ItemDetail.class.getSimpleName();
     FirebaseFirestore db;
@@ -35,11 +39,20 @@ public class ItemDetail extends AppCompatActivity {
     NumberPicker numberPicker;
     Item item;
     private FirebaseAnalytics mFirebaseAnalytics;
+    @BindView(R.id.toolbar_detail)
+    public Toolbar toolBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
+        ButterKnife.bind(this);
+
+        toolBar.setTitle(getResources().getString(R.string.app_name));
+        setSupportActionBar(toolBar);
+
+        DrawerUtil.getDrawer(this, toolBar);
+
         MobileAds.initialize(this, "ca-app-pub-3785462047203626~3446159950");
         itemImages = findViewById(R.id.itemImages);
         itemName = findViewById(R.id.itemName);
@@ -116,8 +129,12 @@ public class ItemDetail extends AppCompatActivity {
             public void onSuccess(Void aVoid) {
                 try {
                     new Database((getBaseContext()))
-                            .addToCart(new order(itemRef.getId(), item.getName(), item.getPrice(), numberPicker.getValue()));
-                }catch (Exception e){
+                            .addToCart(new order(common.currentUser.getId(),
+                                    itemRef.getId(),
+                                    item.getName(),
+                                    item.getPrice(),
+                                    numberPicker.getValue()));
+                } catch (Exception e) {
                     itemRef.update("quantity", item.getPrice() + numberPicker.getValue());
                 }
             }
