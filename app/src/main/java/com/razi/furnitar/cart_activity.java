@@ -1,18 +1,20 @@
 package com.razi.furnitar;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.Database.Database;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -32,13 +34,15 @@ public class cart_activity extends AppCompatActivity {
     cartAdapter adapter;
     @BindView(R.id.toolbar_cart)
     public Toolbar toolBar;
+    private static Context c;
+    private static GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart_activity);
         ButterKnife.bind(this);
-
+        c = this;
         toolBar.setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(toolBar);
 
@@ -50,6 +54,10 @@ public class cart_activity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         total = findViewById(R.id.total);
         checkout = findViewById(R.id.btnCart);
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, connectionResult -> Log.i("OK", "NOT OK"))
+                .addApi(Auth.GOOGLE_SIGN_IN_API)
+                .build();
         loadItems();
     }
 
@@ -68,7 +76,9 @@ public class cart_activity extends AppCompatActivity {
 
     }
 
-    public void removeFromCart(View view) {
-
+    public static void signOut() {
+        FirebaseAuth.getInstance().signOut();
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                status -> c.startActivity(new Intent(c, Login.class)));
     }
 }

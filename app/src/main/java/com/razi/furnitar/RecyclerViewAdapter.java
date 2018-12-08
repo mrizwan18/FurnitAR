@@ -5,20 +5,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class RecyclerViewAdapter extends FirestoreRecyclerAdapter<Item, RecyclerViewAdapter.ViewHolder> {
 
     private OnItemClickListener listener;
+
     public RecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<Item> options) {
         super(options);
     }
@@ -26,46 +28,52 @@ public class RecyclerViewAdapter extends FirestoreRecyclerAdapter<Item, Recycler
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_view, viewGroup, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i, @NonNull Item model) {
-        viewHolder.name.setText(model.getName());
-        viewHolder.price.setText(model.getPrice() + "");
+        String AR;
+        if (model.getIsAR()) {
+            AR = "AR";
+        } else {
+            AR = "";
+        }
+        if (!AR.equals("")) {
+            TextDrawable drawable = TextDrawable.builder().buildRound(AR, R.color.colorPrimaryDark);
+            viewHolder.item_view_AR.setImageDrawable(drawable);
+        }
+        viewHolder.item_view_name.setText(model.getName());
+        Locale locale = new Locale("en", "US");
+        NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
+        viewHolder.item_view_price.setText(fmt.format(model.getPrice()));
         String url = model.getImages().get(0);
         Picasso.get()
                 .load(url)
-                .into(viewHolder.img);
-        if (model.getIsAR()) {
-            viewHolder.arLabel.setText("AR");
-        } else {
-            viewHolder.arLabel.setText("");
-        }
+                .into(viewHolder.item_view_image);
+
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name;
-        TextView price;
-        ImageView img;
-        TextView arLabel;
+        TextView item_view_name, item_view_price;
+        ImageView item_view_image, item_view_AR;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.name);
-            price = itemView.findViewById(R.id.price);
-            arLabel = itemView.findViewById(R.id.ar_label);
-            img = itemView.findViewById(R.id.imageView);
+            item_view_name = itemView.findViewById(R.id.item_view_name);
+            item_view_price = itemView.findViewById(R.id.item_view_price);
+            item_view_image = itemView.findViewById(R.id.item_view_image);
+            item_view_AR = itemView.findViewById(R.id.item_view_AR);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int pos = getAdapterPosition();
-                    if(pos != RecyclerView.NO_POSITION && listener != null){
+                    if (pos != RecyclerView.NO_POSITION && listener != null) {
                         listener.onItemClick(getSnapshots().getSnapshot(pos), pos);
                     }
                 }
@@ -73,11 +81,11 @@ public class RecyclerViewAdapter extends FirestoreRecyclerAdapter<Item, Recycler
         }
     }
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void onItemClick(DocumentSnapshot documentSnapshot, int pos);
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener){
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 }
