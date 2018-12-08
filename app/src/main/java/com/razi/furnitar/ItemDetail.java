@@ -143,7 +143,7 @@ public class ItemDetail extends AppCompatActivity {
     }
 
     public void addToCart(View view) {
-        itemRef.update("quantity", item.getPrice() - numberPicker.getValue()).addOnSuccessListener(new OnSuccessListener<Void>() {
+        itemRef.update("quantity", item.getQuantity() - numberPicker.getValue()).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 try {
@@ -155,8 +155,9 @@ public class ItemDetail extends AppCompatActivity {
                                     numberPicker.getValue()));
                     Toast.makeText(ItemDetail.this, "Item Added to Cart",
                             Toast.LENGTH_SHORT).show();
+                    numberPicker.setMaxValue(item.getQuantity() - numberPicker.getValue());
                 } catch (Exception e) {
-                    itemRef.update("quantity", item.getPrice() + numberPicker.getValue());
+                    itemRef.update("quantity", item.getQuantity() + numberPicker.getValue());
                     Toast.makeText(ItemDetail.this, "Something went Wrong",
                             Toast.LENGTH_SHORT).show();
                 }

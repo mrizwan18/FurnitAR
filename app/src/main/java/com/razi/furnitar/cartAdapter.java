@@ -4,18 +4,27 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.Database.Database;
 import com.amulyakhare.textdrawable.TextDrawable;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 class cartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -44,10 +53,12 @@ class cartViewHolder extends RecyclerView.ViewHolder implements View.OnClickList
 public class cartAdapter extends RecyclerView.Adapter<cartViewHolder> {
     private Context context;
     private List<order> items = new ArrayList<>();
+    FirebaseFirestore db;
 
     public cartAdapter(Context context, List<order> items) {
         this.context = context;
         this.items = items;
+        db = FirebaseFirestore.getInstance();
     }
 
     @NonNull
@@ -74,4 +85,47 @@ public class cartAdapter extends RecyclerView.Adapter<cartViewHolder> {
     public int getItemCount() {
         return items.size();
     }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void deleteItem(int position) {
+        order o = items.get(position);
+        Pair<String, Integer> itemDetail = new Database(getContext()).removeFromCart(o);
+        DocumentReference itemRef = db.collection("items").document(itemDetail.first);
+        final double[] quantity = new double[1];
+        itemRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                quantity[0] = (double) documentSnapshot.get("quantity");
+                itemRef.update("quantity", quantity[0] + itemDetail.second);
+                items.remove(position);
+                notifyItemRemoved(position);
+            }
+        });
+
+
+    }
+
+    public void checkOutItem(int position) {
+        order o = items.get(position);
+        Pair<String, Integer> itemDetail = new Database(getContext()).removeFromCart(o);
+        Map<String, Object> history_item = new HashMap<>();
+        history_item.put("id", itemDetail.first);
+        history_item.put("quantity", itemDetail.second);
+        db.collection("purchase_history").add(history_item);
+        final String[] id = new String[1];
+        db.collection("cart").whereEqualTo("id", itemDetail.first).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                id[0] = queryDocumentSnapshots.getDocuments().get(0).getId();
+                db.collection("cart").document(id[0]).delete();
+                items.remove(position);
+                notifyItemRemoved(position);
+            }
+        });
+
+    }
+
 }

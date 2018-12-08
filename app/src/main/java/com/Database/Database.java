@@ -7,16 +7,25 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Pair;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.razi.furnitar.common;
 import com.razi.furnitar.order;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Database extends SQLiteAssetHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "cartDB.db";
+    FirebaseFirestore cloud = FirebaseFirestore.getInstance();
 
     public Database(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -43,13 +52,39 @@ public class Database extends SQLiteAssetHelper {
     public void addToCart(order order) {
         try{
             SQLiteDatabase db = this.getReadableDatabase();
+            String query ="select quantity from cart where id = ?";
+            int quantity = 0;
+            Cursor c = db.rawQuery(query, new String[] {order.getId()});
+            while(c.moveToNext()){
+                quantity = c.getInt(c.getColumnIndex("quantity"));
+            }
+            if(quantity > 0){
+                query = "update cart set quantity = ? where id = ?";
+                db.execSQL(query, new Object[] {quantity+order.getQuantity(), order.getId()});
+                final String[] id = new String[1];
+                int finalQuantity = quantity;
+                cloud.collection("cart").whereEqualTo("id", order.getId()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        id[0] = queryDocumentSnapshots.getDocuments().get(0).getId();
+                        cloud.collection("cart").document(id[0]).update("quantity", finalQuantity +order.getQuantity());
+                    }
+                });
+
+                return;
+            }
             ContentValues values = new ContentValues();
             values.put("id", order.getId());
             values.put("name", order.getName());
             values.put("price", order.getPrice());
             values.put("quantity", order.getQuantity());
             values.put("userID", order.getUserid());
-            db.insertWithOnConflict("cart", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+            db.insertWithOnConflict("cart", null, values, SQLiteDatabase.CONFLICT_NONE);
+            Map<String, Object> cart_item = new HashMap<>();
+            cart_item.put("id", order.getId());
+            cart_item.put("user", order.getUserid());
+            cart_item.put("quantity", order.getQuantity());
+            cloud.collection("cart").add(cart_item);
         }
         catch(Exception e){
 
@@ -64,8 +99,7 @@ public class Database extends SQLiteAssetHelper {
         String[] sqlselect = {"id", "quantity"};
         String sqlTable = "cart";
         qb.setTables(sqlTable);
-        String[] s = {order.getId()};
-        Cursor c = qb.query(db, sqlselect, "id", s, null, null, null);
+        Cursor c = qb.query(db, sqlselect, "id = ?", new String[] {order.getId()}, null, null, null);
         ArrayList<Pair<String, Integer>> result = new ArrayList<Pair<String, Integer>>();
         if (c.moveToNext()) {
             do {
@@ -76,6 +110,15 @@ public class Database extends SQLiteAssetHelper {
         }
         query = String.format("DELETE FROM cart where id='%s';", order.getId());
         db.execSQL(query);
+        final String[] id = new String[1];
+        cloud.collection("cart").whereEqualTo("id", order.getId()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                id[0] = queryDocumentSnapshots.getDocuments().get(0).getId();
+                cloud.collection("cart").document(id[0]).delete();
+            }
+        });
+
         return result.get(0);
     }
 
