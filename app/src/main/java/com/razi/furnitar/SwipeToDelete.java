@@ -10,6 +10,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.widget.TextView;
+
+import com.Database.Database;
+
+import java.text.NumberFormat;
+import java.util.List;
+import java.util.Locale;
 
 public class SwipeToDelete extends ItemTouchHelper.SimpleCallback {
 

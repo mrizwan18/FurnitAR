@@ -70,15 +70,10 @@ public class cart_activity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDelete(adapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
-        int totalP = 0;
-        for (order o : cart) {
-            totalP += o.getPrice() * o.getQuantity();
-        }
-        Locale locale = new Locale("en", "US");
-        NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
-        total.setText(fmt.format(totalP));
-
+        adapter.calTotal(cart, total);
     }
+
+
 
     public static void signOut() {
         FirebaseAuth.getInstance().signOut();
@@ -87,8 +82,7 @@ public class cart_activity extends AppCompatActivity {
     }
 
     public void checkOut(View view) {
-        for(int i = 0; i < adapter.getItemCount(); i++){
-            adapter.checkOutItem(i);
-        }
+        adapter.checkOutItem();
+        total.setText("$0");
     }
 }
