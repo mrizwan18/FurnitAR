@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.firebase.auth.FirebaseAuth;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -56,6 +54,7 @@ public class DrawerUtil {
                 .withActionBarDrawerToggleAnimated(true)
                 .withCloseOnClick(true)
                 .withSelectedItem(-1)
+                .withTranslucentNavigationBar(true)
                 .addDrawerItems(
                         products,
                         new DividerDrawerItem(),
@@ -66,15 +65,18 @@ public class DrawerUtil {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         if (drawerItem.getIdentifier() == 1 && !(activity instanceof MainActivity)) {
-                            // load tournament screen
                             Intent intent = new Intent(activity, MainActivity.class);
                             view.getContext().startActivity(intent);
                         } else if (drawerItem.getIdentifier() == 2) {
-                            // load tournament screen
                             Intent intent = new Intent(activity, cart_activity.class);
                             view.getContext().startActivity(intent);
                         } else if (drawerItem.getIdentifier() == 3) {
-                            FirebaseAuth.getInstance().signOut();
+                            if (activity.getLocalClassName().equals("MainActivity"))
+                                MainActivity.signOut();
+                            else if (activity.getLocalClassName().equals("ItemDetail"))
+                                ItemDetail.signOut();
+                            else if (activity.getLocalClassName().equals("cart_activity"))
+                                cart_activity.signOut();
                         }
                         return true;
                     }

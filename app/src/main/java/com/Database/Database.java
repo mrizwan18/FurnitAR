@@ -41,14 +41,20 @@ public class Database extends SQLiteAssetHelper {
     }
 
     public void addToCart(order order) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("id", order.getId());
-        values.put("name", order.getName());
-        values.put("price", order.getPrice());
-        values.put("quantity", order.getQuantity());
-        values.put("userID", order.getUserid());
-        db.insertWithOnConflict("cart", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        try{
+            SQLiteDatabase db = this.getReadableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("id", order.getId());
+            values.put("name", order.getName());
+            values.put("price", order.getPrice());
+            values.put("quantity", order.getQuantity());
+            values.put("userID", order.getUserid());
+            db.insertWithOnConflict("cart", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        }
+        catch(Exception e){
+
+        }
+
     }
 
     public Pair<String, Integer> removeFromCart(order order) {
