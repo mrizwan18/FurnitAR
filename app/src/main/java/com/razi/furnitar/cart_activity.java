@@ -7,7 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -66,6 +68,8 @@ public class cart_activity extends AppCompatActivity {
         Log.i("Yes", cart.size() + "");
         adapter = new cartAdapter(getBaseContext(), cart);
         recyclerView.setAdapter(adapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDelete(adapter));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
         int totalP = 0;
         for (order o : cart) {
             totalP += o.getPrice() * o.getQuantity();
@@ -80,5 +84,11 @@ public class cart_activity extends AppCompatActivity {
         FirebaseAuth.getInstance().signOut();
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                 status -> c.startActivity(new Intent(c, Login.class)));
+    }
+
+    public void checkOut(View view) {
+        for(int i = 0; i < adapter.getItemCount(); i++){
+            adapter.checkOutItem(i);
+        }
     }
 }

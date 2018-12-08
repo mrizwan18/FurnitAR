@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         Query query;
-        query = db.collection("items");
+        query = db.collection("items").whereGreaterThan("quantity", 0);
         FirestoreRecyclerOptions<Item> options;
         options = new FirestoreRecyclerOptions.Builder<Item>()
                 .setQuery(query, Item.class)
