@@ -24,14 +24,21 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerViewAdapter adapter, ARadapter, NonARadapter;
-    FirebaseAuth gAuth;
     private static GoogleApiClient mGoogleApiClient;
-    FirebaseAuth.AuthStateListener aL;
     private static Context c;
-    private FirebaseAnalytics mFirebaseAnalytics;
+    @BindView(R.id.toolbar_main)
+    public Toolbar toolBar;
+    FirebaseAuth gAuth;
+    FirebaseAuth.AuthStateListener aL;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private RecyclerViewAdapter adapter, ARadapter, NonARadapter;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
+    public static void signOut() {
+        FirebaseAuth.getInstance().signOut();
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                status -> c.startActivity(new Intent(c, Login.class)));
+    }
 
     @Override
     protected void onStart() {
@@ -40,9 +47,6 @@ public class MainActivity extends AppCompatActivity {
         mGoogleApiClient.connect();
         adapter.startListening();
     }
-
-    @BindView(R.id.toolbar_main)
-    public Toolbar toolBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
                 .build();
     }
 
-
     private void initRecyclerView() {
 
         RecyclerView recyclerView = findViewById(R.id.list);
@@ -112,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 String name = documentSnapshot.get("name").toString();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
                 bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
-                Intent intent = new Intent(getApplicationContext(), ItemDetail.class);
+                Intent intent = new Intent(getApplicationContext(), Item_Detail.class);
                 intent.putExtra("path", path);
                 startActivity(intent);
             }
@@ -123,12 +126,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
-    }
-
-    public static void signOut() {
-        FirebaseAuth.getInstance().signOut();
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                status -> c.startActivity(new Intent(c, Login.class)));
     }
 
     public void seacrhItem(View view) {

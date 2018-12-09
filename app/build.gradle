@@ -46,6 +46,7 @@ dependencies {
     implementation 'info.hoang8f:fbutton:1.0.5'
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
+    implementation 'com.cepheuen.elegant-number-button:lib:1.0.2'
     compile('com.mikepenz:materialdrawer:5.9.5@aar') {
         transitive = true
         exclude group: 'com.android.support'

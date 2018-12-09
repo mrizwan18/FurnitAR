@@ -9,17 +9,26 @@ public class Item {
     private List<String> images;
     private boolean isAR;
     private int quantity;
+    private String description;
 
     public Item() {
     }
 
-    public Item(String name, Double price, ArrayList<String> img, boolean isAR) {
+    public Item(String name, Double price, ArrayList<String> img, boolean isAR, String desc) {
         this.name = name;
         this.price = price;
         this.images = img;
         this.isAR = isAR;
+        this.description = desc;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getName() {
         return name;

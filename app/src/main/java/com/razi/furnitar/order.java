@@ -10,6 +10,15 @@ public class order {
     public order() {
     }
 
+    public order(String userid, String id, String name, double price, int quantity) {
+
+        this.userid = userid;
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
     public String getUserid() {
         return userid;
     }
@@ -47,15 +56,6 @@ public class order {
     }
 
     public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public order(String userid, String id, String name, double price, int quantity) {
-
-        this.userid = userid;
-        this.id = id;
-        this.name = name;
-        this.price = price;
         this.quantity = quantity;
     }
 }

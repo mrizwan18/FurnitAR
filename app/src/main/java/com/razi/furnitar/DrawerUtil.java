@@ -73,8 +73,8 @@ public class DrawerUtil {
                         } else if (drawerItem.getIdentifier() == 3) {
                             if (activity.getLocalClassName().equals("MainActivity"))
                                 MainActivity.signOut();
-                            else if (activity.getLocalClassName().equals("ItemDetail"))
-                                ItemDetail.signOut();
+                            else if (activity.getLocalClassName().equals("Item_Detail"))
+                                Item_Detail.signOut();
                             else if (activity.getLocalClassName().equals("cart_activity"))
                                 cart_activity.signOut();
                         }

@@ -30,13 +30,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Login extends AppCompatActivity {
+    private static final int RC_SIGN_IN = 69;
     SignInButton sBtn;
     FirebaseAuth gAuth;
     EditText userT, pass;
     Button signin, signUp;
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAuth.AuthStateListener aL;
-    private static final int RC_SIGN_IN = 69;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

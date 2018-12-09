@@ -36,12 +36,12 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/signup_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/b_style1"
                 android:text="Sign Up"
-                android:id="@+id/signup_2"
                 android:textColor="#fff" />
 
             <Button

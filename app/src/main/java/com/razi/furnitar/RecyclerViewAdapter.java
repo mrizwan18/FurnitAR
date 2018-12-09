@@ -56,6 +56,13 @@ public class RecyclerViewAdapter extends FirestoreRecyclerAdapter<Item, Recycler
 
     }
 
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(DocumentSnapshot documentSnapshot, int pos);
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -79,13 +86,5 @@ public class RecyclerViewAdapter extends FirestoreRecyclerAdapter<Item, Recycler
                 }
             });
         }
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(DocumentSnapshot documentSnapshot, int pos);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
     }
 }
