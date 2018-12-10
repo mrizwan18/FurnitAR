@@ -1,6 +1,6 @@
 package com.razi.furnitar;
 
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -9,26 +9,18 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
-import android.widget.TextView;
-
-import com.Database.Database;
-
-import java.text.NumberFormat;
-import java.util.List;
-import java.util.Locale;
 
 public class SwipeToDelete extends ItemTouchHelper.SimpleCallback {
-
+    private static Context c;
     private final ColorDrawable backgorund;
     private cartAdapter mAdapter;
     private Drawable icon;
 
-    @SuppressLint("ResourceAsColor")
     public SwipeToDelete(cartAdapter adapter) {
         super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         mAdapter = adapter;
-        icon = ContextCompat.getDrawable(mAdapter.getContext(), R.drawable.ic_exit_to_app_black_24dp);
-        backgorund = new ColorDrawable(R.color.delete);
+        icon = ContextCompat.getDrawable(mAdapter.getContext(), R.drawable.ic_delete_sweep_black_24dp);
+        backgorund = new ColorDrawable(mAdapter.getContext().getResources().getColor(R.color.delete));
     }
 
 

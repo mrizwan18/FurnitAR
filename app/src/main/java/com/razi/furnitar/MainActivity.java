@@ -2,6 +2,8 @@ package com.razi.furnitar;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.auth.api.Auth;
@@ -29,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar_main)
     public Toolbar toolBar;
     FirebaseAuth gAuth;
+    Button ar, nonAR;
+    Drawable d;
+    int disableAR, disableNon;
     FirebaseAuth.AuthStateListener aL;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private RecyclerViewAdapter adapter, ARadapter, NonARadapter;
@@ -54,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        toolBar.setTitle(getResources().getString(R.string.app_name));
+        toolBar.setTitle("");
         setSupportActionBar(toolBar);
 
         DrawerUtil.getDrawer(this, toolBar);
@@ -64,7 +70,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
+        ar = findViewById(R.id.ar_filter);
+        nonAR = findViewById(R.id.non_ar_filter);
+        disableAR = 0;
+        disableNon = 0;
+        d = ar.getBackground();
         Query query;
         query = db.collection("items").whereGreaterThan("quantity", 0);
         FirestoreRecyclerOptions<Item> options;
@@ -129,5 +139,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void seacrhItem(View view) {
+    }
+
+    public void disableAR(View view) {
+        if (disableAR == 0) {
+            ar.setBackgroundResource(R.drawable.non_ar);
+            ar.setTextColor(ar.getContext().getResources().getColor(R.color.colorPrimaryDark));
+            disableAR = 1;
+        } else {
+            ar.setBackground(d);
+            ar.setTextColor(Color.WHITE);
+            disableAR = 0;
+        }
+
+    }
+
+    public void disableNonAR(View view) {
+        if (disableNon == 0) {
+            nonAR.setBackgroundResource(R.drawable.non_ar);
+            nonAR.setTextColor(nonAR.getContext().getResources().getColor(R.color.colorPrimaryDark));
+            disableNon = 1;
+        } else {
+            nonAR.setBackground(d);
+            nonAR.setTextColor(Color.WHITE);
+            disableNon = 0;
+        }
     }
 }
