@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.auth.api.Auth;
@@ -21,6 +22,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,12 +38,15 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar_main)
     public Toolbar toolBar;
     FirebaseAuth gAuth;
-    Button ar, nonAR;
+    Button ar, nonAR, searchButton;
     Drawable d;
-    int disableAR;
+    boolean showAR;
+    String searchQuery;
+    TextView searchbar;
+    boolean cancel;
     FirebaseAuth.AuthStateListener aL;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private RecyclerViewAdapter adapter, ARadapter, NonARadapter;
+    private RecyclerViewAdapter adapter, ARadapter, NonARadapter, searchAdapter;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     public static void signOut() {
@@ -71,7 +80,10 @@ public class MainActivity extends AppCompatActivity {
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         ar = findViewById(R.id.ar_filter);
-        disableAR = 0;
+        showAR = true;
+        searchbar = (TextView) findViewById(R.id.searchbar);
+        searchButton = (Button) findViewById(R.id.search_button);
+        cancel = false;
         d = ar.getBackground();
         Query query;
         query = db.collection("items").whereGreaterThan("quantity", 0);
@@ -81,19 +93,24 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         adapter = new RecyclerViewAdapter(options);
 
-        query = db.collection("items").whereEqualTo("isAR", true);
+        query = db.collection("items").whereGreaterThan("quantity", 0);
 
         options = new FirestoreRecyclerOptions.Builder<Item>()
                 .setQuery(query, Item.class)
                 .build();
         ARadapter = new RecyclerViewAdapter(options);
 
-        query = db.collection("items").whereEqualTo("isAR", false);
+        query = db.collection("items")
+                .whereEqualTo("isAR", false)
+                .whereGreaterThan("quantity", 0);
 
         options = new FirestoreRecyclerOptions.Builder<Item>()
                 .setQuery(query, Item.class)
                 .build();
         NonARadapter = new RecyclerViewAdapter(options);
+
+
+
 
 
         initRecyclerView();
@@ -137,18 +154,49 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void seacrhItem(View view) {
+        adapter.startListening();
+        if(!cancel){
+            searchQuery = searchbar.getText().toString();
+            ArrayList<String> arr = new ArrayList<>(Arrays.asList(searchQuery.split(" ")));
+            searchQuery = "";
+            for(String s : arr){
+                searchQuery += (" " + s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase());
+            }
+            searchQuery = searchQuery.substring(1);
+            String s = searchQuery.substring(0,searchQuery.length() - 2);
+            char c = searchQuery.charAt(searchQuery.length() - 1);
+            c++;
+            s += c;
+            Query query = db.collection("items")
+                    .whereEqualTo("name", searchQuery)
+                    .whereGreaterThan("quantity", 0);
+
+            FirestoreRecyclerOptions<Item> options = new FirestoreRecyclerOptions.Builder<Item>()
+                    .setQuery(query, Item.class)
+                    .build();
+            searchAdapter = new RecyclerViewAdapter(options);
+            adapter = searchAdapter;
+            searchButton.setBackground(getBaseContext().getDrawable(R.drawable.ic_cancel_black_24dp));
+        }
+        else{
+            searchbar.setText("");
+            adapter = ARadapter;
+            searchButton.setBackground(getBaseContext().getDrawable(R.drawable.ic_search_black_24dp));
+        }
+        adapter.stopListening();
+        cancel = !cancel;
     }
 
-    public void disableAR(View view) {
-        if (disableAR == 0) {
-            ar.setBackgroundResource(R.drawable.non_ar);
-            ar.setTextColor(ar.getContext().getResources().getColor(R.color.colorPrimaryDark));
-            disableAR = 1;
-        } else {
-            ar.setBackground(d);
-            ar.setTextColor(Color.WHITE);
-            disableAR = 0;
-        }
 
+    public void showAR(View view) {
+        showAR = !showAR;
+        adapter.stopListening();
+        if(showAR){
+            adapter = ARadapter;
+        }
+        else{
+            adapter = NonARadapter;
+        }
+        adapter.startListening();
     }
 }
