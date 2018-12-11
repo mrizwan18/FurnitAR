@@ -3,10 +3,10 @@ package com.razi.furnitar;
 import android.net.Uri;
 
 public class user {
+    Uri photo;
     private String name;
     private String id;
     private String email;
-    Uri photo;
 
     public user() {
     }

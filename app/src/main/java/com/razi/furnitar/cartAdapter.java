@@ -3,7 +3,6 @@ package com.razi.furnitar;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +12,7 @@ import android.widget.TextView;
 
 import com.Database.Database;
 import com.amulyakhare.textdrawable.TextDrawable;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -102,18 +99,19 @@ public class cartAdapter extends RecyclerView.Adapter<cartViewHolder> {
         itemRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                quantity[0] =  documentSnapshot.getLong("quantity").intValue();
+                quantity[0] = documentSnapshot.getLong("quantity").intValue();
                 itemRef.update("quantity", quantity[0] + itemDetail.second);
                 items.remove(position);
                 notifyItemRemoved(position);
+                calTotal(cart, total);
             }
         });
-        calTotal(cart,total);
+
     }
 
     public void checkOutItem() {
         ArrayList<order> orders = new ArrayList<>();
-        for(int position = 0; position < items.size(); ) {
+        for (int position = 0; position < items.size(); ) {
             orders.add(items.get(position));
             items.remove(position);
             notifyItemRemoved(position);
@@ -138,8 +136,8 @@ public class cartAdapter extends RecyclerView.Adapter<cartViewHolder> {
 
     }
 
-    public void calTotal(List<order> cart_t, TextView total_t){
-        cart = cart_t;
+    public void calTotal(List<order> cart_t, TextView total_t) {
+        cart = items;
         total = total_t;
         int totalP = 0;
         for (order o : cart) {

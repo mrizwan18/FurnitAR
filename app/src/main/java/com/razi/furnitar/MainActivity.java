@@ -2,6 +2,8 @@ package com.razi.furnitar;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.auth.api.Auth;
@@ -24,14 +27,24 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerViewAdapter adapter, ARadapter, NonARadapter;
-    FirebaseAuth gAuth;
     private static GoogleApiClient mGoogleApiClient;
-    FirebaseAuth.AuthStateListener aL;
     private static Context c;
-    private FirebaseAnalytics mFirebaseAnalytics;
+    @BindView(R.id.toolbar_main)
+    public Toolbar toolBar;
+    FirebaseAuth gAuth;
+    Button ar, nonAR;
+    Drawable d;
+    int disableAR;
+    FirebaseAuth.AuthStateListener aL;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private RecyclerViewAdapter adapter, ARadapter, NonARadapter;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
+    public static void signOut() {
+        FirebaseAuth.getInstance().signOut();
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                status -> c.startActivity(new Intent(c, Login.class)));
+    }
 
     @Override
     protected void onStart() {
@@ -41,16 +54,13 @@ public class MainActivity extends AppCompatActivity {
         adapter.startListening();
     }
 
-    @BindView(R.id.toolbar_main)
-    public Toolbar toolBar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        toolBar.setTitle(getResources().getString(R.string.app_name));
+        toolBar.setTitle("");
         setSupportActionBar(toolBar);
 
         DrawerUtil.getDrawer(this, toolBar);
@@ -60,7 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
+        ar = findViewById(R.id.ar_filter);
+        disableAR = 0;
+        d = ar.getBackground();
         Query query;
         query = db.collection("items").whereGreaterThan("quantity", 0);
         FirestoreRecyclerOptions<Item> options;
@@ -96,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
                 .build();
     }
 
-
     private void initRecyclerView() {
 
         RecyclerView recyclerView = findViewById(R.id.list);
@@ -112,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 String name = documentSnapshot.get("name").toString();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
                 bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
-                Intent intent = new Intent(getApplicationContext(), ItemDetail.class);
+                Intent intent = new Intent(getApplicationContext(), Item_Detail.class);
                 intent.putExtra("path", path);
                 startActivity(intent);
             }
@@ -125,12 +136,19 @@ public class MainActivity extends AppCompatActivity {
         adapter.stopListening();
     }
 
-    public static void signOut() {
-        FirebaseAuth.getInstance().signOut();
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                status -> c.startActivity(new Intent(c, Login.class)));
+    public void seacrhItem(View view) {
     }
 
-    public void seacrhItem(View view) {
+    public void disableAR(View view) {
+        if (disableAR == 0) {
+            ar.setBackgroundResource(R.drawable.non_ar);
+            ar.setTextColor(ar.getContext().getResources().getColor(R.color.colorPrimaryDark));
+            disableAR = 1;
+        } else {
+            ar.setBackground(d);
+            ar.setTextColor(Color.WHITE);
+            disableAR = 0;
+        }
+
     }
 }

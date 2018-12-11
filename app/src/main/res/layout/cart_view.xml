@@ -41,12 +41,13 @@
                 android:textStyle="italic" />
 
         </LinearLayout>
+
         <ImageView
+            android:id="@+id/cart_item_quantity"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginRight="16dp"
-            android:id="@+id/cart_item_quantity"
-            android:layout_gravity="center_vertical|end"/>
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginRight="16dp" />
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

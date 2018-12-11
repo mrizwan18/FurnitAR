@@ -15,11 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity"></activity>
         <activity android:name=".Login">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,18 +24,17 @@
             </intent-filter>
         </activity>
         <activity android:name=".signUp" />
-        <activity android:name=".ItemDetail" />
+        <activity android:name=".Item_Detail" />
 
         <meta-data
             android:name="com.google.ar.core"
             android:value="optional" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3785462047203626~3446159950" />
+            android:value="ca-app-pub-5091759987842562~8434864389" />
 
         <activity android:name=".ARactivity" />
-        <activity android:name=".cart_activity"></activity>
-
+        <activity android:name=".cart_activity" />
     </application>
 
 </manifest>

@@ -5,18 +5,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.Database.Database;
+import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.auth.api.Auth;
@@ -33,20 +36,23 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class ItemDetail extends AppCompatActivity {
-    public static final String tag = ItemDetail.class.getSimpleName();
+public class Item_Detail extends AppCompatActivity {
+    TextView item_details_name, item_details_price, item_details_description;
+    ImageView item_detail_image;
+    CollapsingToolbarLayout toolbar;
+    FloatingActionButton fab;
+    ElegantNumberButton picker;
+    private static GoogleApiClient mGoogleApiClient;
+    private static Context c;
+    String itemId = "";
     FirebaseFirestore db;
     DocumentReference itemRef;
-    ImageView itemImages;
-    TextView itemName, itemPrice, errorText;
-    Button btn, addToCart;
-    NumberPicker numberPicker;
+    Button view_ar;
     Item item;
-    private static Context c;
-    private static GoogleApiClient mGoogleApiClient;
     private FirebaseAnalytics mFirebaseAnalytics;
+    @BindView(R.id.toolbar)
+    public Toolbar toolBar;
 
     @Override
     protected void onStart() {
@@ -54,60 +60,65 @@ public class ItemDetail extends AppCompatActivity {
         mGoogleApiClient.connect();
     }
 
-    @BindView(R.id.toolbar_detail)
-    public Toolbar toolBar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_detail);
-        ButterKnife.bind(this);
-        c = this;
-        toolBar.setTitle(getResources().getString(R.string.app_name));
-        setSupportActionBar(toolBar);
-
-        DrawerUtil.getDrawer(this, toolBar);
-
-        MobileAds.initialize(this, "ca-app-pub-3785462047203626~3446159950");
-        itemImages = findViewById(R.id.itemImages);
-        itemName = findViewById(R.id.itemName);
-        itemPrice = findViewById(R.id.itemPrice);
-        btn = findViewById(R.id.viewInAR);
-        numberPicker = findViewById(R.id.quantity);
-        errorText = findViewById(R.id.errorText);
-        addToCart = findViewById(R.id.addToCart);
-
-        // Obtain the FirebaseAnalytics instance.
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
+        setContentView(R.layout.activity_item__detail);
+        db = FirebaseFirestore.getInstance();
         Intent intent = getIntent();
         String path = intent.getStringExtra("path");
-        db = FirebaseFirestore.getInstance();
         itemRef = db.document(path);
+        item_details_name = findViewById(R.id.item_name);
+        item_details_price = findViewById(R.id.item_price);
+        item_details_description = findViewById(R.id.item_description);
+        item_detail_image = findViewById(R.id.detail_image);
+        fab = findViewById(R.id.cart_btn);
+        picker = findViewById(R.id.quantity_picker);
+        toolbar = findViewById(R.id.collapse);
+        toolbar.setExpandedTitleTextAppearance(R.style.appbar);
+        toolbar.setCollapsedTitleTextAppearance(R.style.Collapsed);
+        setSupportActionBar(toolBar);
+        DrawerUtil.getDrawer(this, toolBar);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        view_ar = findViewById(R.id.view_AR);
+
         itemRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 item = task.getResult().toObject(Item.class);
                 Picasso.get()
                         .load(item.getImages().get(0))
-                        .into(itemImages);
-                itemName.setText(item.getName());
-                itemPrice.setText("Rs. " + item.getPrice());
+                        .into(item_detail_image);
+                item_details_name.setText(item.getName());
+                item_details_price.setText("$ " + item.getPrice());
+                item_details_description.setText(item.getDescription());
                 if (item.getIsAR() && maybeEnableArButton()) {
-                    btn.setVisibility(View.VISIBLE);
+                    view_ar.setVisibility(View.VISIBLE);
+                } else {
+                    view_ar.setVisibility(View.INVISIBLE);
+                    if (item.getIsAR()) {
+                        view_ar.setVisibility(View.VISIBLE);
+                        view_ar.setEnabled(false);
+                        view_ar.setText("AR Not Supported");
+                        view_ar.setTextSize(12f);
+                    }
                 }
-                numberPicker.setMinValue(1);
-                numberPicker.setMaxValue(item.getQuantity());
+                picker.setRange(1, item.getQuantity());
+                toolbar.setTitle(item.getName());
             }
         });
-        AdView adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .build();
-        adView.loadAd(adRequest);
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, connectionResult -> Log.i("OK", "NOT OK"))
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
+        MobileAds.initialize(this, "ca-app-pub-5091759987842562~8434864389");
+        AdView adView = new AdView(this);
+        adView.setAdSize(AdSize.BANNER);
+        adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+        adView.loadAd(adRequest);
     }
 
     boolean maybeEnableArButton() {
@@ -123,10 +134,8 @@ public class ItemDetail extends AppCompatActivity {
         }
         if (availability.isSupported()) {
             return true;
-        } else { // Unsupported or unknown.
-            errorText.setVisibility(View.VISIBLE);
-            return false;
         }
+        return false;
     }
 
     public void viewInAR(View view) {
@@ -143,7 +152,7 @@ public class ItemDetail extends AppCompatActivity {
     }
 
     public void addToCart(View view) {
-        itemRef.update("quantity", item.getQuantity() - numberPicker.getValue()).addOnSuccessListener(new OnSuccessListener<Void>() {
+        itemRef.update("quantity", item.getQuantity() - Integer.parseInt(picker.getNumber())).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 try {
@@ -152,13 +161,13 @@ public class ItemDetail extends AppCompatActivity {
                                     itemRef.getId(),
                                     item.getName(),
                                     item.getPrice(),
-                                    numberPicker.getValue()));
-                    Toast.makeText(ItemDetail.this, "Item Added to Cart",
+                                    Integer.parseInt(picker.getNumber())));
+                    Toast.makeText(Item_Detail.this, "Item Added to Cart",
                             Toast.LENGTH_SHORT).show();
-                    numberPicker.setMaxValue(item.getQuantity() - numberPicker.getValue());
+                    picker.setRange(1, item.getQuantity() - Integer.parseInt(picker.getNumber()));
                 } catch (Exception e) {
-                    itemRef.update("quantity", item.getQuantity() + numberPicker.getValue());
-                    Toast.makeText(ItemDetail.this, "Something went Wrong",
+                    itemRef.update("quantity", item.getQuantity() + Integer.parseInt(picker.getNumber()));
+                    Toast.makeText(Item_Detail.this, "Something went Wrong",
                             Toast.LENGTH_SHORT).show();
                 }
             }
@@ -171,4 +180,5 @@ public class ItemDetail extends AppCompatActivity {
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                 status -> c.startActivity(new Intent(c, Login.class)));
     }
+
 }
