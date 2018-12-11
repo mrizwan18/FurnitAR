@@ -18,6 +18,10 @@ import android.widget.Toast;
 
 import com.Database.Database;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -89,9 +93,16 @@ public class Item_Detail extends AppCompatActivity {
                 item_details_price.setText("$ " + item.getPrice());
                 item_details_description.setText(item.getDescription());
                 if (item.getIsAR() && maybeEnableArButton()) {
-                    view_ar.setEnabled(true);
-                } else
-                    view_ar.setEnabled(false);
+                    view_ar.setVisibility(View.VISIBLE);
+                } else {
+                    view_ar.setVisibility(View.INVISIBLE);
+                    if (item.getIsAR()) {
+                        view_ar.setVisibility(View.VISIBLE);
+                        view_ar.setEnabled(false);
+                        view_ar.setText("AR Not Supported");
+                        view_ar.setTextSize(12f);
+                    }
+                }
                 picker.setRange(1, item.getQuantity());
                 toolbar.setTitle(item.getName());
             }
@@ -100,6 +111,14 @@ public class Item_Detail extends AppCompatActivity {
                 .enableAutoManage(this, connectionResult -> Log.i("OK", "NOT OK"))
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
+        MobileAds.initialize(this, "ca-app-pub-5091759987842562~8434864389");
+        AdView adView = new AdView(this);
+        adView.setAdSize(AdSize.BANNER);
+        adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+        adView.loadAd(adRequest);
     }
 
     boolean maybeEnableArButton() {

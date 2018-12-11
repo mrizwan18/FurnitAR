@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth gAuth;
     Button ar, nonAR;
     Drawable d;
-    int disableAR, disableNon;
+    int disableAR;
     FirebaseAuth.AuthStateListener aL;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private RecyclerViewAdapter adapter, ARadapter, NonARadapter;
@@ -71,9 +71,7 @@ public class MainActivity extends AppCompatActivity {
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         ar = findViewById(R.id.ar_filter);
-        nonAR = findViewById(R.id.non_ar_filter);
         disableAR = 0;
-        disableNon = 0;
         d = ar.getBackground();
         Query query;
         query = db.collection("items").whereGreaterThan("quantity", 0);
@@ -152,17 +150,5 @@ public class MainActivity extends AppCompatActivity {
             disableAR = 0;
         }
 
-    }
-
-    public void disableNonAR(View view) {
-        if (disableNon == 0) {
-            nonAR.setBackgroundResource(R.drawable.non_ar);
-            nonAR.setTextColor(nonAR.getContext().getResources().getColor(R.color.colorPrimaryDark));
-            disableNon = 1;
-        } else {
-            nonAR.setBackground(d);
-            nonAR.setTextColor(Color.WHITE);
-            disableNon = 0;
-        }
     }
 }

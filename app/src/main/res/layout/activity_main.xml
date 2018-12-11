@@ -28,6 +28,7 @@
             android:layout_marginLeft="15dp"
             android:background="@drawable/et"
             android:gravity="start"
+            android:hint="Search for Items..."
             android:padding="5dp"
             android:textAlignment="center"
             android:textColor="@color/colorPrimary" />
@@ -45,32 +46,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:gravity="center"
         android:orientation="horizontal">
+
+        <TextView
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Apply Filters to Products    "
+            android:textColor="@color/colorPrimary" />
 
         <Button
             android:id="@+id/ar_filter"
             android:layout_width="100dp"
             android:layout_height="30dp"
-            android:layout_gravity="start"
-            android:layout_marginLeft="50dp"
+            android:layout_marginRight="5dp"
             android:background="@drawable/ar_button"
+            android:onClick="disableAR"
             android:text="AR"
             android:textColor="@color/cart"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:onClick="disableAR"/>
+            android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/non_ar_filter"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="60dp"
-            android:background="@drawable/ar_button"
-            android:text="NON AR"
-            android:textColor="@color/cart"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:onClick="disableNonAR"/>
+
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
