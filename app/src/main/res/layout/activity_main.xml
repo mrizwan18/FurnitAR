@@ -62,7 +62,7 @@
             android:layout_height="30dp"
             android:layout_marginRight="5dp"
             android:background="@drawable/ar_button"
-            android:onClick="disableAR"
+            android:onClick="showAR"
             android:text="AR"
             android:textColor="@color/cart"
             android:textSize="20sp"
