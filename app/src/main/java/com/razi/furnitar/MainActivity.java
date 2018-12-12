@@ -142,6 +142,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.list);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        clickListener();
+    }
+
+    private void clickListener(){
         adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int pos) {
@@ -186,16 +190,25 @@ public class MainActivity extends AppCompatActivity {
             FirestoreRecyclerOptions<Item> options = new FirestoreRecyclerOptions.Builder<Item>()
                     .setQuery(query, Item.class)
                     .build();
-            searchAdapter = new RecyclerViewAdapter(options);
-            adapter = searchAdapter;
+            adapter = new RecyclerViewAdapter(options);
+
             searchButton.setBackgroundResource(R.drawable.ic_cancel_black_24dp);
         }
         else{
             searchbar.setText("");
-            adapter = ARadapter;
+            Query query = db.collection("items")
+                    .whereGreaterThan("quantity", 0);
+
+            FirestoreRecyclerOptions<Item> options = new FirestoreRecyclerOptions.Builder<Item>()
+                    .setQuery(query, Item.class)
+                    .build();
+            adapter = new RecyclerViewAdapter(options);
             searchButton.setBackground(getBaseContext().getDrawable(R.drawable.ic_search_black_24dp));
         }
+
         adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(adapter);
+        clickListener();
         adapter.startListening();
         cancel = !cancel;
     }
@@ -223,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
         }
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        clickListener();
         adapter.startListening();
     }
 }
