@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Login">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"
+        android:padding="120dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome to FurnitAR"
+            android:textColor="#fff"
+            android:textSize="80sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:text="@string/Description"
+            android:textColor="#fff"
+            android:textSize="35sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/signup_2"
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:layout_margin="30dp"
+                android:background="@drawable/b_style1"
+                android:text="Sign Up"
+                android:textSize="30sp"
+                android:textColor="#fff" />
+
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:layout_margin="30dp"
+                android:background="@drawable/b_style2"
+                android:text="Learn More"
+                android:textSize="25sp"
+                android:textColor="#fff" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="800dp"
+            android:layout_height="80dp"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:drawableLeft="@drawable/ic_person_outline_black_24dp"
+            android:drawablePadding="10dp"
+            android:hint="EMAIL ID"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="800dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:drawableLeft="@drawable/ic_lock_outline_black_24dp"
+            android:drawablePadding="10dp"
+            android:hint="PASSWORD"
+            android:inputType="textPassword"
+            android:paddingTop="20dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="60dp"
+            android:paddingTop="20dp">
+
+            <Button
+                android:id="@+id/signin"
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/b_style1"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/ic_send_black_24dp"
+                android:text="Sign In"
+                android:textSize="25sp"
+                android:textColor="#fff" />
+
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/sign_in_button"
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:paddingLeft="40dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

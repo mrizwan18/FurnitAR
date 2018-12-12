@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="35dp"
+        android:theme="@style/ToolbarIcon">
+
+        <EditText
+            android:id="@+id/searchbar"
+            android:layout_width="350dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="25dp"
+            android:background="@drawable/et"
+            android:gravity="start"
+            android:hint="Search for Items..."
+            android:padding="25dp"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary" />
+
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="14dp"
+            android:background="@drawable/ic_search_black_24dp"
+            android:onClick="seacrhItem" />
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:textSize="25sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Apply Filters to Products    "
+            android:textColor="@color/colorPrimary" />
+
+        <Button
+            android:id="@+id/ar_filter"
+            android:layout_width="180dp"
+            android:layout_height="60dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/ar_button"
+            android:onClick="showAR"
+            android:text="AR"
+            android:textColor="@color/cart"
+            android:textSize="35sp"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>
+
+
