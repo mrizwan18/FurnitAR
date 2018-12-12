@@ -90,7 +90,7 @@ public class ARactivity extends AppCompatActivity {
                         this,
                         Uri.parse(GLTF_ASSET),
                         RenderableSource.SourceType.GLTF2)
-                        .setScale(0.1f)  // Scale the original model to 50%.
+                        .setScale(0.8f)  // Scale the original model to 50%.
                         .setRecenterMode(RenderableSource.RecenterMode.ROOT)
                         .build())
                 .setRegistryId(GLTF_ASSET)

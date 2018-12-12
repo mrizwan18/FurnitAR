@@ -1,6 +1,7 @@
 package com.razi.furnitar;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
@@ -132,6 +133,13 @@ public class cartAdapter extends RecyclerView.Adapter<cartViewHolder> {
                     db.collection("cart").document(id[0]).delete();
                 }
             });
+            String purchase = "Name: "
+                    + orders.get(position).getName() + " Quantity: "
+                    + orders.get(position).getQuantity() + " Total Price: $"
+                    + (orders.get(position).getQuantity() * orders.get(position).getPrice());
+            Intent intent = new Intent(context, HistoryService.class);
+            intent.putExtra("purchase", purchase);
+            context.startService(intent);
         }
 
     }
