@@ -2,6 +2,7 @@ package com.razi.furnitar;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static GoogleApiClient mGoogleApiClient;
     private static Context c;
+    internetConnectivity it;
+
     @BindView(R.id.toolbar_main)
     public Toolbar toolBar;
     FirebaseAuth gAuth;
@@ -54,6 +57,11 @@ public class MainActivity extends AppCompatActivity {
         adapter.startListening();
     }
 
+    protected void onDestroy() {
+        unregisterReceiver(it);
+        super.onDestroy();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +74,9 @@ public class MainActivity extends AppCompatActivity {
         DrawerUtil.getDrawer(this, toolBar);
         gAuth = FirebaseAuth.getInstance();
         c = this;
-
+        IntentFilter in = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        it = new internetConnectivity();
+        registerReceiver(it, in);
 
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);

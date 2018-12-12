@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,8 +28,14 @@ public class ARactivity extends AppCompatActivity {
     private static final String TAG = "ARactivity";
     private static final double MIN_OPENGL_VERSION = 3.0;
     private static String GLTF_ASSET;
+    internetConnectivity it;
     private ModelRenderable modelRenderable;
     private ArFragment arFragment;
+
+    protected void onDestroy() {
+        unregisterReceiver(it);
+        super.onDestroy();
+    }
 
     /**
      * Returns false and displays an error message if Sceneform can not run, true if Sceneform can run
@@ -73,6 +80,9 @@ public class ARactivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_aractivity);
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+        IntentFilter in = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        it = new internetConnectivity();
+        registerReceiver(it, in);
 
 
         ModelRenderable.builder()
