@@ -173,19 +173,14 @@ public class MainActivity extends AppCompatActivity {
         adapter.stopListening();
         if(!cancel){
             searchQuery = searchbar.getText().toString();
-            ArrayList<String> arr = new ArrayList<>(Arrays.asList(searchQuery.split(" ")));
-            searchQuery = "";
-            for(String s : arr){
-                searchQuery += (" " + s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase());
-            }
-            searchQuery = searchQuery.substring(1);
-            String s = searchQuery.substring(0,searchQuery.length() - 2);
+            searchQuery = searchQuery.toLowerCase();
+            String s = searchQuery.substring(0,searchQuery.length() - 1);
             char c = searchQuery.charAt(searchQuery.length() - 1);
             c++;
             s += c;
             Query query = db.collection("items")
-                    .whereEqualTo("name", searchQuery)
-                    .whereGreaterThan("quantity", 0);
+                    .whereGreaterThanOrEqualTo("name", searchQuery)
+                    .whereLessThan("name", s);
 
             FirestoreRecyclerOptions<Item> options = new FirestoreRecyclerOptions.Builder<Item>()
                     .setQuery(query, Item.class)
