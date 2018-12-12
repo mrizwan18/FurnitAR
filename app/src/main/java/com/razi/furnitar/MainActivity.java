@@ -2,6 +2,7 @@ package com.razi.furnitar;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -35,12 +36,15 @@ public class MainActivity extends AppCompatActivity {
 
     private static GoogleApiClient mGoogleApiClient;
     private static Context c;
+    internetConnectivity it;
+
     @BindView(R.id.toolbar_main)
     public Toolbar toolBar;
     FirebaseAuth gAuth;
     Button ar, nonAR, searchButton;
     Drawable d;
     boolean showAR;
+    FirestoreRecyclerOptions<Item> options;
     String searchQuery;
     TextView searchbar;
     boolean cancel;
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private RecyclerViewAdapter adapter, ARadapter, NonARadapter, searchAdapter;
     private FirebaseAnalytics mFirebaseAnalytics;
+    RecyclerView recyclerView;
 
     public static void signOut() {
         FirebaseAuth.getInstance().signOut();
@@ -63,6 +68,11 @@ public class MainActivity extends AppCompatActivity {
         adapter.startListening();
     }
 
+    protected void onDestroy() {
+        unregisterReceiver(it);
+        super.onDestroy();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +85,9 @@ public class MainActivity extends AppCompatActivity {
         DrawerUtil.getDrawer(this, toolBar);
         gAuth = FirebaseAuth.getInstance();
         c = this;
-
+        IntentFilter in = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        it = new internetConnectivity();
+        registerReceiver(it, in);
 
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -87,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         d = ar.getBackground();
         Query query;
         query = db.collection("items").whereGreaterThan("quantity", 0);
-        FirestoreRecyclerOptions<Item> options;
+
         options = new FirestoreRecyclerOptions.Builder<Item>()
                 .setQuery(query, Item.class)
                 .build();
@@ -127,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRecyclerView() {
 
-        RecyclerView recyclerView = findViewById(R.id.list);
+        recyclerView = findViewById(R.id.list);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
@@ -154,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void seacrhItem(View view) {
-        adapter.startListening();
+        adapter.stopListening();
         if(!cancel){
             searchQuery = searchbar.getText().toString();
             ArrayList<String> arr = new ArrayList<>(Arrays.asList(searchQuery.split(" ")));
@@ -176,14 +188,15 @@ public class MainActivity extends AppCompatActivity {
                     .build();
             searchAdapter = new RecyclerViewAdapter(options);
             adapter = searchAdapter;
-            searchButton.setBackground(getBaseContext().getDrawable(R.drawable.ic_cancel_black_24dp));
+            searchButton.setBackgroundResource(R.drawable.ic_cancel_black_24dp);
         }
         else{
             searchbar.setText("");
             adapter = ARadapter;
             searchButton.setBackground(getBaseContext().getDrawable(R.drawable.ic_search_black_24dp));
         }
-        adapter.stopListening();
+        adapter.notifyDataSetChanged();
+        adapter.startListening();
         cancel = !cancel;
     }
 
@@ -191,12 +204,25 @@ public class MainActivity extends AppCompatActivity {
     public void showAR(View view) {
         showAR = !showAR;
         adapter.stopListening();
+        Query query;
         if(showAR){
-            adapter = ARadapter;
+            query = db.collection("items").whereGreaterThan("quantity", 0);
+            options = new FirestoreRecyclerOptions.Builder<Item>()
+                    .setQuery(query, Item.class)
+                    .build();
+            adapter = new RecyclerViewAdapter(options);
         }
         else{
-            adapter = NonARadapter;
+            query = db.collection("items")
+                    .whereEqualTo("isAR", false)
+                    .whereGreaterThan("quantity", 0);
+            options = new FirestoreRecyclerOptions.Builder<Item>()
+                    .setQuery(query, Item.class)
+                    .build();
+            adapter = new RecyclerViewAdapter(options);
         }
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         adapter.startListening();
     }
 }

@@ -2,6 +2,7 @@ package com.razi.furnitar;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,10 +19,8 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,12 +31,18 @@ public class cart_activity extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
     List<order> cart = new ArrayList<>();
     TextView total;
+    internetConnectivity it;
     Button checkout;
     cartAdapter adapter;
     @BindView(R.id.toolbar_cart)
     public Toolbar toolBar;
     private static Context c;
     private static GoogleApiClient mGoogleApiClient;
+
+    protected void onDestroy() {
+        unregisterReceiver(it);
+        super.onDestroy();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +54,9 @@ public class cart_activity extends AppCompatActivity {
         setSupportActionBar(toolBar);
 
         DrawerUtil.getDrawer(this, toolBar);
-
+        IntentFilter in = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        it = new internetConnectivity();
+        registerReceiver(it, in);
         recyclerView = findViewById(R.id.cart);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
@@ -72,7 +79,6 @@ public class cart_activity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(recyclerView);
         adapter.calTotal(cart, total);
     }
-
 
 
     public static void signOut() {

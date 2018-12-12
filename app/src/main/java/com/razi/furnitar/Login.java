@@ -1,6 +1,7 @@
 package com.razi.furnitar;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,12 +33,16 @@ import java.util.regex.Pattern;
 public class Login extends AppCompatActivity {
     private static final int RC_SIGN_IN = 69;
     SignInButton sBtn;
+    internetConnectivity it;
     FirebaseAuth gAuth;
     EditText userT, pass;
     Button signin, signUp;
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAuth.AuthStateListener aL;
-
+    protected void onDestroy() {
+        unregisterReceiver(it);
+        super.onDestroy();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +95,9 @@ public class Login extends AppCompatActivity {
                 }
             }
         };
+        IntentFilter in = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        it = new internetConnectivity();
+        registerReceiver(it, in);
 
     }
 

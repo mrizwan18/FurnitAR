@@ -1,6 +1,7 @@
 package com.razi.furnitar;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,12 @@ public class signUp extends AppCompatActivity {
     FirebaseAuth gAuth;
     Button signUp, signin;
     EditText user1, pass1;
+    internetConnectivity it;
+
+    protected void onDestroy() {
+        unregisterReceiver(it);
+        super.onDestroy();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,9 @@ public class signUp extends AppCompatActivity {
                 startActivity(new Intent(signUp.this, Login.class));
             }
         });
+        IntentFilter in = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        it = new internetConnectivity();
+        registerReceiver(it, in);
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

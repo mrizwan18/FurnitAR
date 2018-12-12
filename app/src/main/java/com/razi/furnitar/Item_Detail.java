@@ -2,6 +2,7 @@ package com.razi.furnitar;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -44,6 +45,7 @@ public class Item_Detail extends AppCompatActivity {
     FloatingActionButton fab;
     ElegantNumberButton picker;
     private static GoogleApiClient mGoogleApiClient;
+    internetConnectivity it;
     private static Context c;
     String itemId = "";
     FirebaseFirestore db;
@@ -81,6 +83,9 @@ public class Item_Detail extends AppCompatActivity {
         DrawerUtil.getDrawer(this, toolBar);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         view_ar = findViewById(R.id.view_AR);
+        IntentFilter in = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        it = new internetConnectivity();
+        registerReceiver(it, in);
 
         itemRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -111,14 +116,23 @@ public class Item_Detail extends AppCompatActivity {
                 .enableAutoManage(this, connectionResult -> Log.i("OK", "NOT OK"))
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
-        MobileAds.initialize(this, "ca-app-pub-5091759987842562~8434864389");
-        AdView adView = new AdView(this);
-        adView.setAdSize(AdSize.BANNER);
-        adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .build();
-        adView.loadAd(adRequest);
+        try {
+            MobileAds.initialize(this, "ca-app-pub-5091759987842562~8434864389");
+            AdView adView = new AdView(this);
+            adView.setAdSize(AdSize.BANNER);
+            adView = findViewById(R.id.adView);
+            AdRequest adRequest = new AdRequest.Builder()
+                    .build();
+            adView.loadAd(adRequest);
+        }
+        catch (Exception e){
+            Log.d("qwerty", "ad:" + e.getMessage());
+        }
+    }
+
+    protected void onDestroy() {
+        unregisterReceiver(it);
+        super.onDestroy();
     }
 
     boolean maybeEnableArButton() {
@@ -138,7 +152,11 @@ public class Item_Detail extends AppCompatActivity {
         return false;
     }
 
+
+
     public void viewInAR(View view) {
+        view_ar.setEnabled(true);
+        Toast.makeText(c, "aa gya", Toast.LENGTH_SHORT).show();
         Bundle bundle = new Bundle();
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
         String id = itemRef.getId();
