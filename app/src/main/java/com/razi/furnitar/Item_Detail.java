@@ -99,6 +99,7 @@ public class Item_Detail extends AppCompatActivity {
                 item_details_description.setText(item.getDescription());
                 if (item.getIsAR() && maybeEnableArButton()) {
                     view_ar.setVisibility(View.VISIBLE);
+                    view_ar.setEnabled(true);
                 } else {
                     view_ar.setVisibility(View.INVISIBLE);
                     if (item.getIsAR()) {
@@ -156,7 +157,6 @@ public class Item_Detail extends AppCompatActivity {
 
     public void viewInAR(View view) {
         view_ar.setEnabled(true);
-        Toast.makeText(c, "aa gya", Toast.LENGTH_SHORT).show();
         Bundle bundle = new Bundle();
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
         String id = itemRef.getId();

@@ -142,6 +142,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.list);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        clickListener();
+    }
+
+    private void clickListener(){
         adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int pos) {
@@ -169,33 +173,37 @@ public class MainActivity extends AppCompatActivity {
         adapter.stopListening();
         if(!cancel){
             searchQuery = searchbar.getText().toString();
-            ArrayList<String> arr = new ArrayList<>(Arrays.asList(searchQuery.split(" ")));
-            searchQuery = "";
-            for(String s : arr){
-                searchQuery += (" " + s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase());
-            }
-            searchQuery = searchQuery.substring(1);
-            String s = searchQuery.substring(0,searchQuery.length() - 2);
+            searchQuery = searchQuery.toLowerCase();
+            String s = searchQuery.substring(0,searchQuery.length() - 1);
             char c = searchQuery.charAt(searchQuery.length() - 1);
             c++;
             s += c;
             Query query = db.collection("items")
-                    .whereEqualTo("name", searchQuery)
+                    .whereGreaterThanOrEqualTo("name", searchQuery)
+                    .whereLessThan("name", s);
+
+            FirestoreRecyclerOptions<Item> options = new FirestoreRecyclerOptions.Builder<Item>()
+                    .setQuery(query, Item.class)
+                    .build();
+            adapter = new RecyclerViewAdapter(options);
+
+            searchButton.setBackgroundResource(R.drawable.ic_cancel_black_24dp);
+        }
+        else{
+            searchbar.setText("");
+            Query query = db.collection("items")
                     .whereGreaterThan("quantity", 0);
 
             FirestoreRecyclerOptions<Item> options = new FirestoreRecyclerOptions.Builder<Item>()
                     .setQuery(query, Item.class)
                     .build();
-            searchAdapter = new RecyclerViewAdapter(options);
-            adapter = searchAdapter;
-            searchButton.setBackgroundResource(R.drawable.ic_cancel_black_24dp);
-        }
-        else{
-            searchbar.setText("");
-            adapter = ARadapter;
+            adapter = new RecyclerViewAdapter(options);
             searchButton.setBackground(getBaseContext().getDrawable(R.drawable.ic_search_black_24dp));
         }
+
         adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(adapter);
+        clickListener();
         adapter.startListening();
         cancel = !cancel;
     }
@@ -223,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
         }
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        clickListener();
         adapter.startListening();
     }
 }

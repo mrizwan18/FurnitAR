@@ -8,6 +8,8 @@
     <!-- Needed to load a glTF from the internet. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 
     <application
         android:allowBackup="true"
@@ -46,10 +48,8 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".MyService"
-            android:enabled="true"
-            android:exported="true"></service>
+        <service android:name=".HistoryService"></service>
+
     </application>
 
 </manifest>
