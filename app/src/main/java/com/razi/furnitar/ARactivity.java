@@ -121,6 +121,7 @@ public class ARactivity extends AppCompatActivity {
                     TransformableNode andy = new TransformableNode(arFragment.getTransformationSystem());
                     andy.setParent(anchorNode);
                     andy.setRenderable(modelRenderable);
+                    andy.getScaleController().setEnabled(false);
                     andy.select();
                 });
 

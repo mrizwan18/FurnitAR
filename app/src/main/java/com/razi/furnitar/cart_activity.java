@@ -89,6 +89,8 @@ public class cart_activity extends AppCompatActivity {
 
     public void checkOut(View view) {
         adapter.checkOutItem();
-        total.setText("$0");
+        total.setText("$0.00");
+        this.finish();
+        startActivity(new Intent(cart_activity.this, MainActivity.class));
     }
 }

@@ -15,14 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "788287719692-3p19bk8ma74e285erue576cja6mf0thg.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.razi.furnitar",
-            "certificate_hash": "fc33fdf74b144bb2f8e86dc8649477ac0cbf353a"
-          }
-        },
-        {
           "client_id": "788287719692-d4ls1b8sj5ur8camfeu3io09rkgq580l.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -31,7 +23,15 @@
           }
         },
         {
-          "client_id": "788287719692-9onp9l4v34v2bl5dgn2nbjs2h39gcjqa.apps.googleusercontent.com",
+          "client_id": "788287719692-3p19bk8ma74e285erue576cja6mf0thg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.razi.furnitar",
+            "certificate_hash": "fc33fdf74b144bb2f8e86dc8649477ac0cbf353a"
+          }
+        },
+        {
+          "client_id": "788287719692-k154crltc9ueimriel8ebqp3acgpr8c9.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -41,20 +41,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "788287719692-k154crltc9ueimriel8ebqp3acgpr8c9.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       },
       "admob_app_id": "ca-app-pub-5091759987842562~8434864389"

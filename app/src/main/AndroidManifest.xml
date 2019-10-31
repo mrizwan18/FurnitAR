@@ -18,16 +18,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" />
-        <activity android:name=".Login">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Login"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".splash_activity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".signUp" />
-        <activity android:name=".Item_Detail" />
+        <activity
+            android:name=".signUp"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Item_Detail"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.ar.core"
@@ -36,8 +53,12 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-5091759987842562~8434864389" />
 
-        <activity android:name=".ARactivity" />
-        <activity android:name=".cart_activity" />
+        <activity
+            android:name=".ARactivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".cart_activity"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".internetConnectivity"

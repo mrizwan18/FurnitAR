@@ -47,7 +47,7 @@ dependencies {
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
     implementation 'com.cepheuen.elegant-number-button:lib:1.0.2'
-    implementation ('com.mikepenz:materialdrawer:5.9.5@aar') {
+    implementation('com.mikepenz:materialdrawer:6.0.9@aar') {
         transitive = true
         exclude group: 'com.android.support'
     }

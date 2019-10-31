@@ -1,5 +1,6 @@
 package com.razi.furnitar;
 
+import android.bluetooth.BluetoothClass;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -118,15 +119,14 @@ public class Item_Detail extends AppCompatActivity {
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
         try {
-            MobileAds.initialize(this, "ca-app-pub-5091759987842562~8434864389");
+            MobileAds.initialize(this, "ca-app-pub-3940256099942544/6300978111");
             AdView adView = new AdView(this);
             adView.setAdSize(AdSize.BANNER);
             adView = findViewById(R.id.adView);
             AdRequest adRequest = new AdRequest.Builder()
                     .build();
             adView.loadAd(adRequest);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Log.d("qwerty", "ad:" + e.getMessage());
         }
     }
@@ -154,7 +154,6 @@ public class Item_Detail extends AppCompatActivity {
     }
 
 
-
     public void viewInAR(View view) {
         view_ar.setEnabled(true);
         Bundle bundle = new Bundle();
@@ -167,6 +166,13 @@ public class Item_Detail extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), ARactivity.class);
         intent.putExtra("asset", asset);
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+        startActivity(new Intent(Item_Detail.this, MainActivity.class));
     }
 
     public void addToCart(View view) {

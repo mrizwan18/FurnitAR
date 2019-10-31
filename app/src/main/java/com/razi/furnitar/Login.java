@@ -58,41 +58,25 @@ public class Login extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         sBtn = findViewById(R.id.sign_in_button);
-        sBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.sign_in_button:
-                        signIn();
-                        break;
-                    // ...
-                }
+        sBtn.setOnClickListener(v -> {
+            switch (v.getId()) {
+                case R.id.sign_in_button:
+                    signIn();
+                    break;
+                // ...
             }
         });
-        signin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signIn(userT.getText().toString(), pass.getText().toString());
-            }
-        });
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Login.this, signUp.class));
-            }
-        });
-        aL = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() != null) {
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    String name = user.getDisplayName();
-                    String email = user.getEmail();
-                    Uri photoUrl = user.getPhotoUrl();
-                    String uid = user.getUid();
-                    common.currentUser = new user(name, uid, email, photoUrl);
-                    startActivity(new Intent(Login.this, MainActivity.class));
-                }
+        signin.setOnClickListener(v -> signIn(userT.getText().toString(), pass.getText().toString()));
+        signUp.setOnClickListener(v -> startActivity(new Intent(Login.this, signUp.class)));
+        aL = firebaseAuth -> {
+            if (firebaseAuth.getCurrentUser() != null) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String name = user.getDisplayName();
+                String email = user.getEmail();
+                Uri photoUrl = user.getPhotoUrl();
+                String uid = user.getUid();
+                common.currentUser = new user(name, uid, email, photoUrl);
+                startActivity(new Intent(Login.this, MainActivity.class));
             }
         };
         IntentFilter in = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
