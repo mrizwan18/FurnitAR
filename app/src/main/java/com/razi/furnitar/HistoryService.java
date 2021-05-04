@@ -3,7 +3,7 @@ package com.razi.furnitar;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Environment;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 
 import java.io.File;
@@ -48,10 +48,7 @@ public class HistoryService extends IntentService {
 
     private boolean isExternalStorageMountable() {
         String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 
     public File getStorageDir(String fileName) {

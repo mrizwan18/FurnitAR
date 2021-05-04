@@ -4,14 +4,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -36,15 +39,19 @@ public class Login extends AppCompatActivity {
     internetConnectivity it;
     FirebaseAuth gAuth;
     EditText userT, pass;
-    Button signin, signUp;
+    Button signin, signUp, skipLogin;
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAuth.AuthStateListener aL;
+
     protected void onDestroy() {
         unregisterReceiver(it);
         super.onDestroy();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         gAuth = FirebaseAuth.getInstance();
@@ -52,6 +59,7 @@ public class Login extends AppCompatActivity {
         pass = findViewById(R.id.password);
         signin = findViewById(R.id.signin);
         signUp = findViewById(R.id.signup_2);
+        skipLogin = findViewById(R.id.skipLogin);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -77,8 +85,16 @@ public class Login extends AppCompatActivity {
                 String uid = user.getUid();
                 common.currentUser = new user(name, uid, email, photoUrl);
                 startActivity(new Intent(Login.this, MainActivity.class));
+                finish();
             }
         };
+        skipLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Login.this, MainActivity.class));
+                finish();
+            }
+        });
         IntentFilter in = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
         it = new internetConnectivity();
         registerReceiver(it, in);

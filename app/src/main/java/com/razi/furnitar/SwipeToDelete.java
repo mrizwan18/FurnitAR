@@ -4,17 +4,17 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import android.view.View;
 
 public class SwipeToDelete extends ItemTouchHelper.SimpleCallback {
     private static Context c;
     private final ColorDrawable backgorund;
-    private cartAdapter mAdapter;
-    private Drawable icon;
+    private final cartAdapter mAdapter;
+    private final Drawable icon;
 
     public SwipeToDelete(cartAdapter adapter) {
         super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);

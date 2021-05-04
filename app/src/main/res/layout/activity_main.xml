@@ -7,40 +7,42 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_width="0px"
-        android:layout_height="0px"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
+<!--    <LinearLayout-->
+<!--        android:layout_width="0px"-->
+<!--        android:layout_height="0px"-->
+<!--        android:focusable="true"-->
+<!--        android:focusableInTouchMode="true" />-->
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_main"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="10dp"
-        android:theme="@style/ToolbarIcon">
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/toolbar_main"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize"-->
+<!--        android:background="?attr/colorPrimary"-->
+<!--        android:elevation="10dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:theme="@style/ToolbarIcon">-->
 
-        <EditText
-            android:id="@+id/searchbar"
-            android:layout_width="230dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="15dp"
-            android:background="@drawable/et"
-            android:gravity="start"
-            android:hint="Search for Items..."
-            android:padding="5dp"
-            android:textAlignment="center"
-            android:textColor="@color/colorPrimary" />
+<!--        <EditText-->
+<!--            android:id="@+id/searchbar"-->
+<!--            android:layout_width="230dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:layout_marginLeft="15dp"-->
+<!--            android:background="@drawable/et"-->
+<!--            android:gravity="start"-->
+<!--            android:hint="Search for Items..."-->
+<!--            android:padding="5dp"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textColor="@color/colorPrimary" />-->
 
-        <Button
-            android:id="@+id/search_button"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginLeft="14dp"
-            android:background="@drawable/ic_search_black_24dp"
-            android:onClick="seacrhItem" />
-    </android.support.v7.widget.Toolbar>
+<!--        <Button-->
+<!--            android:id="@+id/search_button"-->
+<!--            android:layout_width="25dp"-->
+<!--            android:layout_height="25dp"-->
+<!--            android:layout_marginLeft="14dp"-->
+<!--            android:background="@drawable/ic_search_black_24dp"-->
+<!--            android:onClick="seacrhItem" />-->
+<!--    </androidx.appcompat.widget.Toolbar>-->
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -71,12 +73,12 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>
 

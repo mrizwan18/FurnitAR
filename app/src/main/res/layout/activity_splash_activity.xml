@@ -1,17 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/colorPrimaryDark"
-    android:layout_gravity="center"
+    android:background="@color/md_white_1000"
     android:id="@+id/lin_lay"
-    android:gravity="center"
     android:orientation="vertical" >
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/splash"
-        android:background="@drawable/furnit" />
+        android:id="@+id/splash1"
+        android:layout_width="200dp"
+        android:layout_height="300dp"
+        android:background="@drawable/logo_l1"
+        android:contentDescription="Splash Screen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/splash2"
+        android:layout_width="200dp"
+        android:layout_height="300dp"
+        android:background="@drawable/logo_l2"
+        android:contentDescription="Splash Screen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/splash3"
+        android:layout_width="200dp"
+        android:layout_height="300dp"
+        android:background="@drawable/logo_l3"
+        android:contentDescription="Splash Screen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/splash4"
+        android:layout_width="200dp"
+        android:layout_height="300dp"
+        android:background="@drawable/logo_l4"
+        android:contentDescription="Splash Screen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.501" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,8 +2,8 @@ package com.razi.furnitar;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +51,7 @@ class cartViewHolder extends RecyclerView.ViewHolder implements View.OnClickList
 }
 
 public class cartAdapter extends RecyclerView.Adapter<cartViewHolder> {
-    private Context context;
+    private final Context context;
     private List<order> items = new ArrayList<>();
     FirebaseFirestore db;
     List<order> cart = new ArrayList<>();

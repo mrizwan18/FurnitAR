@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,12 +14,35 @@
         android:orientation="vertical"
         android:padding="50dp">
 
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="top"
+            android:layout_marginTop="-10dp">
+
+            <Button
+                android:id="@+id/skipLogin"
+                android:layout_width="301dp"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:drawableEnd="@drawable/skip_icon"
+                android:drawableRight="@drawable/skip_icon"
+                android:textColor="@color/md_white_1000" />
+
+        </RelativeLayout>
+
+
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Welcome to FurnitAR"
             android:textColor="#fff"
-            android:textSize="40sp" />
+            android:textSize="40sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -95,8 +119,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/b_style1"
-                android:drawablePadding="5dp"
                 android:drawableRight="@drawable/ic_send_black_24dp"
+                android:drawablePadding="5dp"
                 android:text="Sign In"
                 android:textColor="#fff" />
 

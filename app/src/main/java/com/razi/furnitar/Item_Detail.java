@@ -1,16 +1,15 @@
 package com.razi.furnitar;
 
-import android.bluetooth.BluetoothClass;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -37,7 +36,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
-import butterknife.BindView;
 
 public class Item_Detail extends AppCompatActivity {
     TextView item_details_name, item_details_price, item_details_description;
@@ -54,7 +52,6 @@ public class Item_Detail extends AppCompatActivity {
     Button view_ar;
     Item item;
     private FirebaseAnalytics mFirebaseAnalytics;
-    @BindView(R.id.toolbar)
     public Toolbar toolBar;
 
     @Override
@@ -147,10 +144,7 @@ public class Item_Detail extends AppCompatActivity {
                 }
             }, 200);
         }
-        if (availability.isSupported()) {
-            return true;
-        }
-        return false;
+        return availability.isSupported();
     }
 
 

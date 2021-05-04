@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/md_white_1000"
+    android:padding="20dp"
+    tools:context=".onBoarding">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/slider"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.viewpager.widget.ViewPager>
+
+    <Button
+        android:id="@+id/skip_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:drawableEnd="@drawable/skip_icon"
+        android:drawableRight="@drawable/skip_icon"
+        android:onClick="skip"
+        android:padding="10dp"
+        android:text="@string/skip_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/get_started_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:text="@string/let_get_started"
+            android:textColor="@color/md_white_1000"
+            android:visibility="invisible" />
+
+        <LinearLayout
+            android:id="@+id/dots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp" />
+
+        <Button
+            android:id="@+id/next_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:background="#00000000"
+            android:drawableEnd="@drawable/next_icon"
+            android:drawableRight="@drawable/next_icon"
+            android:onClick="next"
+            android:layout_marginRight="10dp"
+            android:paddingBottom="20dp" />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

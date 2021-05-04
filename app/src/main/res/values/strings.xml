@@ -12,4 +12,19 @@
     <string name="products">Products</string>
     <string name="show_cart">Show Cart</string>
     <string name="log_out">Log Out</string>
+
+    <!-- Strings for On Boarding Screen -->
+    <string name="first_slide_title">Reshaping E-Commerce</string>
+    <string name="second_slide_title">How it works?</string>
+    <string name="third_slide_title">Is it viable?</string>
+    <string name="fourth_slide_title">Let\'s shop in realtime!</string>
+
+    <string name="first_slide_desc">Introducing AR-Commerce. Buy products online but test like the showroom is in your room. </string>
+    <string name="second_slide_desc">All the furniture items listed here can be viewed using Augmented Reality. Relocate, resize the furniture in your room to see if it matches the decorum.</string>
+    <string name="third_slide_desc">The colors, shape and size of augmented product is displayed perfectly and can be modified according to the needs.</string>
+    <string name="fourth_slide_desc">Let\'s head over to te app and see the action in realtime. </string>
+
+    <string name="skip_btn">Skip</string>
+    <string name="next_btn">Next</string>
+    <string name="let_get_started">Explore</string>
 </resources>
