@@ -2,6 +2,7 @@
 <resources>
     <color name="colorPrimary">#1e272e</color>
     <color name="colorPrimaryDark">#ffa801</color>
+    <color name="colorPrimaryLight">#f7b028</color>
     <color name="colorAccent">#FF4081</color>
     <color name="cart">#FFF</color>
     <color name="overlaybackground">#7f333639</color>

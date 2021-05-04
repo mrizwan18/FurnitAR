@@ -14,12 +14,13 @@ public class Item {
     public Item() {
     }
 
-    public Item(String name, Double price, ArrayList<String> img, boolean isAR, String desc) {
+    public Item(String name, Double price, ArrayList<String> img, boolean isAR, String desc, int quantity) {
         this.name = name;
         this.price = price;
         this.images = img;
         this.isAR = isAR;
         this.description = desc;
+        this.quantity=quantity;
     }
 
     public String getDescription() {
@@ -48,5 +49,9 @@ public class Item {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

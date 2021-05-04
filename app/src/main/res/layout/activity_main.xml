@@ -1,85 +1,98 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_gravity="center"
     tools:context=".MainActivity">
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="0px"-->
-<!--        android:layout_height="0px"-->
-<!--        android:focusable="true"-->
-<!--        android:focusableInTouchMode="true" />-->
-
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar_main"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="?attr/actionBarSize"-->
-<!--        android:background="?attr/colorPrimary"-->
-<!--        android:elevation="10dp"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:theme="@style/ToolbarIcon">-->
-
-<!--        <EditText-->
-<!--            android:id="@+id/searchbar"-->
-<!--            android:layout_width="230dp"-->
-<!--            android:layout_height="30dp"-->
-<!--            android:layout_marginLeft="15dp"-->
-<!--            android:background="@drawable/et"-->
-<!--            android:gravity="start"-->
-<!--            android:hint="Search for Items..."-->
-<!--            android:padding="5dp"-->
-<!--            android:textAlignment="center"-->
-<!--            android:textColor="@color/colorPrimary" />-->
-
-<!--        <Button-->
-<!--            android:id="@+id/search_button"-->
-<!--            android:layout_width="25dp"-->
-<!--            android:layout_height="25dp"-->
-<!--            android:layout_marginLeft="14dp"-->
-<!--            android:background="@drawable/ic_search_black_24dp"-->
-<!--            android:onClick="seacrhItem" />-->
-<!--    </androidx.appcompat.widget.Toolbar>-->
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/montserrat_black"
+        android:text="Hello, User!"
+        android:textAllCaps="true"
+        android:textColor="@android:color/background_dark"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Apply Filters to Products    "
-            android:textColor="@color/colorPrimary" />
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/montserrat_regular"
+        android:text="Excellent day to try out some furniture right inside your room."
+        android:textColor="@android:color/background_dark"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
-        <Button
-            android:id="@+id/ar_filter"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/ar_button"
-            android:onClick="showAR"
-            android:text="AR"
-            android:textColor="@color/cart"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_person_outline_black_24dp" />
 
-
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:srcCompat="@drawable/ic_filter" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:id="@+id/cat_recycler"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/imageView4"
+        tools:listitem="@layout/category_row_item"
+        android:paddingLeft="20dp"/>
 
-    </androidx.recyclerview.widget.RecyclerView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/product_recycler"
+        android:layout_width="0dp"
+        android:layout_height="480dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/imageView4"
+        app:layout_constraintTop_toBottomOf="@+id/cat_recycler"
+        tools:listitem="@layout/products_row_item"
+        android:padding="5dp"/>
 
-</LinearLayout>
+    <Button
+        android:id="@+id/button"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/cart_button_bg"
+        android:drawableRight="@drawable/ic_cart"
+        android:fontFamily="@font/montserrat_black"
+        android:padding="8dp"
+        android:paddingEnd="24dp"
+        android:text="Your Cart is empty"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/product_recycler" />
 
 
+</androidx.constraintlayout.widget.ConstraintLayout>

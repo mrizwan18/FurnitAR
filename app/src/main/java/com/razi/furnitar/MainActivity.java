@@ -3,26 +3,28 @@ package com.razi.furnitar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -32,17 +34,15 @@ public class MainActivity extends AppCompatActivity {
     internetConnectivity it;
 
     FirebaseAuth gAuth;
-    Button ar, nonAR, searchButton;
-    Drawable d;
-    boolean showAR;
-    FirestoreRecyclerOptions<Item> options;
-    String searchQuery;
-    TextView searchbar;
-    boolean cancel;
+    List<Item> products;
+    List<ProductCategory> categories;
+    FirebaseFirestore mFirebaseFirestore;
+    TextView textView5;
+    ImageView imageView3;
+    ProductCategoryAdapter productCategoryAdapter;
+    RecyclerView productCatRecycler, prodItemRecycler;
+    ProductAdapter productAdapter;
     FirebaseAuth.AuthStateListener aL;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    RecyclerView recyclerView;
-    private RecyclerViewAdapter adapter, ARadapter, NonARadapter, searchAdapter;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     public static void signOut() {
@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         gAuth.addAuthStateListener(aL);
         mGoogleApiClient.connect();
-        adapter.startListening();
     }
 
     protected void onDestroy() {
@@ -69,8 +68,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
-
-
+        // Database reference pointing to root of database
+        mFirebaseFirestore = FirebaseFirestore.getInstance();
+        textView5 = findViewById(R.id.textView5);
+        imageView3 = findViewById(R.id.imageView3);
         gAuth = FirebaseAuth.getInstance();
         c = this;
         IntentFilter in = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
@@ -79,143 +80,83 @@ public class MainActivity extends AppCompatActivity {
 
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        ar = findViewById(R.id.ar_filter);
-        showAR = true;
-        searchbar = findViewById(R.id.searchbar);
-        searchButton = findViewById(R.id.search_button);
-        cancel = false;
-        d = ar.getBackground();
-        Query query;
-        query = db.collection("items").whereGreaterThan("quantity", 0);
+        fetchCategoriesFromFirebase();
+        fetchProductsFromFirebase();
 
-        options = new FirestoreRecyclerOptions.Builder<Item>()
-                .setQuery(query, Item.class)
-                .build();
-        adapter = new RecyclerViewAdapter(options);
-
-        query = db.collection("items").whereGreaterThan("quantity", 0);
-
-        options = new FirestoreRecyclerOptions.Builder<Item>()
-                .setQuery(query, Item.class)
-                .build();
-        ARadapter = new RecyclerViewAdapter(options);
-
-        query = db.collection("items")
-                .whereEqualTo("isAR", false)
-                .whereGreaterThan("quantity", 0);
-
-        options = new FirestoreRecyclerOptions.Builder<Item>()
-                .setQuery(query, Item.class)
-                .build();
-        NonARadapter = new RecyclerViewAdapter(options);
-
-
-        initRecyclerView();
         aL = firebaseAuth -> {
             if (firebaseAuth.getCurrentUser() == null) {
                 startActivity(new Intent(MainActivity.this, Login.class));
             }
+            textView5.setText("Hello, " + firebaseAuth.getCurrentUser().getDisplayName()+"!");
+            imageView3.setImageURI(firebaseAuth.getCurrentUser().getPhotoUrl());
         };
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, connectionResult -> Log.i("OK", "NOT OK"))
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
     }
 
-    private void initRecyclerView() {
-
-        recyclerView = findViewById(R.id.list);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        clickListener();
-    }
-
-    private void clickListener() {
-        adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
+    private void fetchProductsFromFirebase() {
+        mFirebaseFirestore.collection("items").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot documentSnapshots) {
+                        if (documentSnapshots.isEmpty()) {
+                            Log.d("cat", "onSuccess: LIST EMPTY");
+                        } else {
+                            products = documentSnapshots.toObjects(Item.class);
+                            setProdItemRecycler(products);
+                            Log.d("cat", "onSuccess: " + categories);
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onItemClick(DocumentSnapshot documentSnapshot, int pos) {
-                Bundle bundle = new Bundle();
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-                String path = documentSnapshot.getReference().getPath();
-                String id = documentSnapshot.getId();
-                String name = documentSnapshot.get("name").toString();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
-                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
-                Intent intent = new Intent(getApplicationContext(), Item_Detail.class);
-                intent.putExtra("path", path);
-                startActivity(intent);
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "Error getting data!!!", Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
+    private void fetchCategoriesFromFirebase() {
+        mFirebaseFirestore.collection("categories").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot documentSnapshots) {
+                        if (documentSnapshots.isEmpty()) {
+                            Log.d("cat", "onSuccess: LIST EMPTY");
+                        } else {
+                            categories = documentSnapshots.toObjects(ProductCategory.class);
+                            setProductRecycler(categories);
+                            Log.d("cat", "onSuccess: " + categories);
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "Error getting data!!!", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
-    public void seacrhItem(View view) {
-        adapter.stopListening();
-        if (!cancel) {
-            searchQuery = searchbar.getText().toString();
-            searchQuery = searchQuery.toLowerCase();
-            String s = searchQuery.substring(0, searchQuery.length() - 1);
-            char c = searchQuery.charAt(searchQuery.length() - 1);
-            c++;
-            s += c;
-            Query query = db.collection("items")
-                    .whereGreaterThanOrEqualTo("name", searchQuery)
-                    .whereLessThan("name", s);
+    private void setProductRecycler(List<ProductCategory> productCategoryList) {
 
-            FirestoreRecyclerOptions<Item> options = new FirestoreRecyclerOptions.Builder<Item>()
-                    .setQuery(query, Item.class)
-                    .build();
-            adapter = new RecyclerViewAdapter(options);
+        productCatRecycler = findViewById(R.id.cat_recycler);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
+        productCatRecycler.setLayoutManager(layoutManager);
+        productCategoryAdapter = new ProductCategoryAdapter(this, productCategoryList);
+        productCatRecycler.setAdapter(productCategoryAdapter);
 
-            searchButton.setBackgroundResource(R.drawable.ic_cancel_black_24dp);
-        } else {
-            searchbar.setText("");
-            Query query = db.collection("items")
-                    .whereGreaterThan("quantity", 0);
-
-            FirestoreRecyclerOptions<Item> options = new FirestoreRecyclerOptions.Builder<Item>()
-                    .setQuery(query, Item.class)
-                    .build();
-            adapter = new RecyclerViewAdapter(options);
-            searchButton.setBackground(getBaseContext().getDrawable(R.drawable.ic_search_black_24dp));
-        }
-
-        adapter.notifyDataSetChanged();
-        recyclerView.setAdapter(adapter);
-        clickListener();
-        adapter.startListening();
-        cancel = !cancel;
     }
 
+    private void setProdItemRecycler(List<Item> productsList) {
 
-    public void showAR(View view) {
-        showAR = !showAR;
-        adapter.stopListening();
-        Query query;
-        if (showAR) {
-            query = db.collection("items").whereGreaterThan("quantity", 0);
-            options = new FirestoreRecyclerOptions.Builder<Item>()
-                    .setQuery(query, Item.class)
-                    .build();
-            adapter = new RecyclerViewAdapter(options);
-        } else {
-            query = db.collection("items")
-                    .whereEqualTo("isAR", false)
-                    .whereGreaterThan("quantity", 0);
-            options = new FirestoreRecyclerOptions.Builder<Item>()
-                    .setQuery(query, Item.class)
-                    .build();
-            adapter = new RecyclerViewAdapter(options);
-        }
-        recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-        clickListener();
-        adapter.startListening();
+        prodItemRecycler = findViewById(R.id.product_recycler);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
+        prodItemRecycler.setLayoutManager(layoutManager);
+        productAdapter = new ProductAdapter(this, productsList);
+        prodItemRecycler.setAdapter(productAdapter);
+
     }
 
 }
